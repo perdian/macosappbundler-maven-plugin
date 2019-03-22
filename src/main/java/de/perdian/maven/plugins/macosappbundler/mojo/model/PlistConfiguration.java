@@ -2,6 +2,7 @@ package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,21 +20,21 @@ import org.w3c.dom.Element;
 public class PlistConfiguration {
 
     @Parameter
-    public String CFBundleIconFile = null;
+    public String CFBundleIconFile;
 
-    @Parameter(defaultValue = "${groupId}.${artifactId}")
+    @Parameter
     public String CFBundleIdentifier = null;
 
-    @Parameter(defaultValue = "${project.name}")
+    @Parameter
     public String CFBundleDisplayName = null;
 
-    @Parameter(defaultValue = "${project.name}")
+    @Parameter
     public String CFBundleName = null;
 
-    @Parameter(defaultValue = "${version}")
+    @Parameter
     public String CFBundleShortVersionString = null;
 
-    @Parameter(defaultValue = "JavaLauncher")
+    @Parameter
     public String CFBundleExecutable = null;
 
     @Parameter
@@ -54,7 +55,10 @@ public class PlistConfiguration {
     @Parameter
     public String JVMRuntimePath = null;
 
-    public String toXmlString() throws Exception {
+    @Parameter
+    public String JVMLogLevel = null;
+
+    public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -65,19 +69,18 @@ public class PlistConfiguration {
         StringWriter writer = new StringWriter();
         writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         writer.append("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
-        transformer.transform(new DOMSource(this.toXmlDocument()), new StreamResult(writer));
+        transformer.transform(new DOMSource(this.toXmlDocument(additionalValues)), new StreamResult(writer));
         return writer.toString();
 
     }
 
-    private Document toXmlDocument() throws Exception {
+    private Document toXmlDocument(Map<String, String> additionalValues) throws Exception {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = documentBuilder.newDocument();
         document.appendChild(document.getImplementation().createDocumentType("plist", "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"));
         Element dictElement = document.createElement("dict");
         this.appendKeyWithString(dictElement, document, "CFBundleDisplayName", this.CFBundleDisplayName);
         this.appendKeyWithString(dictElement, document, "CFBundleExecutable", this.CFBundleExecutable);
-        this.appendKeyWithString(dictElement, document, "CFBundleIconFile", this.CFBundleIconFile);
         this.appendKeyWithString(dictElement, document, "CFBundleIdentifier", this.CFBundleIdentifier);
         this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
         this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
@@ -87,6 +90,10 @@ public class PlistConfiguration {
         this.appendKeyWithArrayOfStrings(dictElement, document, "JVMOptions", this.JVMOptions);
         this.appendKeyWithString(dictElement, document, "JVMRuntimePath", this.JVMRuntimePath);
         this.appendKeyWithString(dictElement, document, "JVMVersion", this.JVMVersion);
+        this.appendKeyWithString(dictElement, document, "JVMLogLevel", this.JVMLogLevel);
+        for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
+            this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
+        }
         Element plistElement = document.createElement("plist");
         plistElement.setAttribute("version", "1.0");
         plistElement.appendChild(dictElement);

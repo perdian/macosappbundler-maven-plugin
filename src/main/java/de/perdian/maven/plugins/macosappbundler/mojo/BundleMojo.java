@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -48,6 +50,12 @@ public class BundleMojo extends AbstractMojo {
             throw new MojoExecutionException("Both 'JVMMainClassName' and 'JVMMainModuleName' have been defined! Make sure to define only one to signalize whether to use a classic classpath application or a moduel application.");
         } else {
 
+            this.plist.CFBundleDisplayName = StringUtils.defaultIfEmpty(this.plist.CFBundleDisplayName, this.project.getName());
+            this.plist.CFBundleName = StringUtils.defaultIfEmpty(this.plist.CFBundleName, this.project.getName());
+            this.plist.CFBundleIdentifier = StringUtils.defaultIfEmpty(this.plist.CFBundleIdentifier, this.project.getGroupId() + "." + this.project.getArtifactId());
+            this.plist.CFBundleShortVersionString = StringUtils.defaultIfEmpty(this.plist.CFBundleShortVersionString, this.project.getVersion());
+            this.plist.CFBundleExecutable = StringUtils.defaultIfEmpty(this.plist.CFBundleExecutable, "JavaLauncher");
+
             File targetDirectory = new File(this.project.getBuild().getDirectory());
             File bundleDirectory = new File(targetDirectory, "bundle");
             File appDirectory = new File(bundleDirectory, this.project.getBuild().getFinalName() + ".app");
@@ -61,7 +69,12 @@ public class BundleMojo extends AbstractMojo {
             this.copyNativeExecutable(new File(appDirectory, "Contents/MacOS"));
 
             this.getLog().info("Generating Info.plist");
-            this.generatePlist(new File(appDirectory, "Contents/Info.plist"));
+            this.generatePlist(new File(appDirectory, "Contents/"));
+
+            if (this.dmg.generate) {
+                this.getLog().info("Generating DMG archive");
+                this.generateDmgArchive(bundleDirectory);
+            }
 
         }
     }
@@ -132,12 +145,45 @@ public class BundleMojo extends AbstractMojo {
         }
     }
 
-    private void generatePlist(File plistFile) throws MojoExecutionException, MojoFailureException {
+    private void generatePlist(File contentsDirectory) throws MojoExecutionException, MojoFailureException {
+        Map<String, String> additionalProperties = new LinkedHashMap<>();
+        String iconFileName = this.copyIcon(contentsDirectory);
+        if (StringUtils.isNotEmpty(iconFileName)) {
+            additionalProperties.put("CFBundleIconFile", iconFileName);
+        }
         try {
-            FileUtils.write(plistFile, this.plist.toXmlString(), "UTF-8");
+            FileUtils.write(new File(contentsDirectory, "Info.plist"), this.plist.toXmlString(additionalProperties), "UTF-8");
         } catch (Exception e) {
             throw new MojoExecutionException("Cannot generate Info.plist file", e);
         }
+    }
+
+    private String copyIcon(File contentsDirectory) throws MojoExecutionException, MojoFailureException {
+        String iconFileValue = this.plist.CFBundleIconFile;
+        if (StringUtils.isNotEmpty(iconFileValue)) {
+            File iconFile = new File(this.project.getBasedir(), iconFileValue);
+            if (!iconFile.exists()) {
+                throw new MojoExecutionException("Cannot find declared icon file " + iconFile.getName() + " at: " + iconFile.getAbsolutePath());
+            } else {
+                File resourcesDirectory = new File(contentsDirectory, "Resources");
+                File targetFile = new File(resourcesDirectory, iconFile.getName());
+                if (!targetFile.getParentFile().exists()) {
+                    targetFile.getParentFile().mkdirs();
+                }
+                try {
+                    FileUtils.copyFile(iconFile, targetFile);
+                    return targetFile.getName();
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Cannot copy icon file to: " + targetFile.getAbsolutePath(), e);
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private void generateDmgArchive(File bundleDirectory) {
+        throw new UnsupportedOperationException("DMG archive generation not supported yet!");
     }
 
 }
