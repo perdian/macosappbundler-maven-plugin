@@ -105,7 +105,7 @@ public class BundleMojo extends AbstractMojo {
                 this.copyAdditionalDmgResources(this.dmg.additionalResources, bundleDirectory);
             }
             if (this.dmg.createApplicationsSymlink) {
-                this.getLog().info("Create Applications Symlink");
+                this.getLog().info("Create Applications symlink");
                 try {
                     Files.createSymbolicLink(new File(bundleDirectory, "Applications").toPath(), Paths.get("/Applications"));
                 } catch (IOException e) {
