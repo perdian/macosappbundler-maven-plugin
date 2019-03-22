@@ -13,7 +13,7 @@ The plugin will automatically be executed during the `package` phase when it is 
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>0.1.0</version>
+        <version>1.0.0</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -30,7 +30,7 @@ The plugin will automatically be executed during the `package` phase when it is 
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>0.1.0</version>
+        <version>1.0.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
