@@ -63,7 +63,7 @@
     NSArray *dylibLocations = [NSArray arrayWithObjects:@"lib/jli/libjli.dylib",@"lib/libjli.dylib",nil];
     log_trace(@"Looking for dynamic library file, trying %i patterns inside JVM directory: %@", [dylibLocations count], jvmDirectory);
     for (id dylibLocation in dylibLocations) {
-        log_trace(@"Looking for dynamic library file %@ inside JVM directory: %@", dylibLocation, jvmDirectory);
+        log_trace(@"Looking for dynamic library file '%@'' inside JVM directory: %@", dylibLocation, jvmDirectory);
         NSString *dylibFileLocation = [jvmDirectory stringByAppendingPathComponent:dylibLocation];
         if ([[NSFileManager defaultManager] fileExistsAtPath:dylibFileLocation isDirectory:NULL]) {
             log_debug(@"Resolved JVM dylib to: %@", dylibFileLocation);

@@ -71,7 +71,8 @@ The following values can be configured:
 | `CFBundleName` | String | No | `${project.name}` | The internal name of your application. |
 | `CFBundleShortVersionString` | String | No | `${version}` | The version of your application. |
 | `CFBundleExecutable` | String | No | `JavaLauncher` | The name of the executable within the application bundle. No user will ever see this but you may want to change it for debugging purposes when analyzing your application. |
-| `JVMMainClassName` | String | Yes | | The main class whose `main` method should be invoked when starting your application. |
+| `JVMMainClassName` | String | Yes (if the application is a classic classpath based application) | | The main class whose `main` method should be invoked when starting your application. |
+| `JVMMainModuleName` | String | Yes (if the application is a module based application) | | The main module that should be invoked when starting your application. |
 | `JVMVersion` | String | No | | The Java version your application needs to work. Can either be an explicit version String like `11.0.1`, a major version like `11` (signalizing that *any* Java 11 runtime is sufficient) or a value like `11+` (signalizing that *any* Java 11 *or higher* runtime is sufficient). |
 | `JVMOptions` | Array of Strings | No | | Additional parameters (`-D` parameters) to be passed to the runtime. |
 | `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the runtime. |
