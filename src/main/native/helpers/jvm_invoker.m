@@ -36,11 +36,13 @@ typedef int (JNICALL *JLI_Launch_t)(int argc, char ** argv,
             char *argv[argc];
             int i = 0;
             argv[i++] = "java";
+            log_trace(@"Arguments");
             for (NSString *argument in arguments) {
+                log_trace(@" [%i] %@", i-1, argument);
                 argv[i++] = strdup([argument UTF8String]);
             }
 
-            log_info(@"Invoking JVM at: %@", dylibLocation);
+            log_info(@"Invoking JVM at: %@\n---\n", dylibLocation);
             return dylibSym(argc, argv,
                             0, NULL,
                             0, NULL,

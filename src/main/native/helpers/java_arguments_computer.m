@@ -22,7 +22,7 @@
 +(void)appendModulesApplicationArguments:(NSMutableArray*)argumentsArray modulesDirectory:(NSString*)modulesDirectory dictionary:(NSDictionary*)dictionary {
     NSString* mainModuleName = [dictionary valueForKey:@"JVMMainModuleName"];
     if ([mainModuleName length] <= 0) {
-        @throw [NSException exceptionWithName:@"InvalidApplicationConfigurationException" reason:@"Invalid application configuration" userInfo:@{@"description": @"No JVMMainModule value has been defined in the Info.plist file.\nA main module is required for a module based application."}];
+        @throw [NSException exceptionWithName:@"InvalidApplicationConfigurationException" reason:@"Invalid application configuration" userInfo:@{@"description": @"No JVMMainModuleName value has been defined in the Info.plist file.\nA main module is required for a module based application."}];
     } else {
         log_trace(@"Appending module application arguments");
         log_debug(@"Computed modules directory: %@", modulesDirectory);
@@ -35,13 +35,59 @@
 }
 
 +(void)appendClasspathApplicationArguments:(NSMutableArray*)argumentsArray classpathDirectory:(NSString*)classpathDirectory dictionary:(NSDictionary*)dictionary {
-    log_info(@"Appending classpath application arguments based on classoath directory at: %@", classpathDirectory);
+    NSString* mainClassName = [dictionary valueForKey:@"JVMMainClassName"];
+    if ([mainClassName length] <= 0) {
+        @throw [NSException exceptionWithName:@"InvalidApplicationConfigurationException" reason:@"Invalid application configuration" userInfo:@{@"description": @"No JVMMainClassName value has been defined in the Info.plist file.\nA main class is required for a classpath based application."}];
+    } else {
+        NSString *classpath = [self createClasspathValue:classpathDirectory];
+        log_trace(@"Appending classpath application arguments");
+        log_debug(@"Computed classpath directory: %@", classpathDirectory);
+        log_info(@"Computed main class name: %@", mainClassName);
+        [argumentsArray addObject:@"-classpath"];
+        [argumentsArray addObject:classpath];
+        [argumentsArray addObject:mainClassName];
+    }
+}
+
++(NSString*)createClasspathValue:(NSString*)classpathDirectory {
+    return [self appendDirectoryToClasspath:classpathDirectory target:[NSMutableString string]];
+}
+
++(NSMutableString*)appendDirectoryToClasspath:(NSString*)directory target:(NSMutableString*)classpath {
+    NSArray* entries = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:NULL];
+    for (id entry in entries) {
+        NSString *entryFile = [directory stringByAppendingPathComponent:entry];
+        BOOL entryIsDirectory = NO;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:entryFile isDirectory:&entryIsDirectory]) {
+            if (entryIsDirectory) {
+                [self appendDirectoryToClasspath:entryFile target:classpath];
+            } else {
+                if ([classpath length] > 0) {
+                    [classpath appendString:@":"];
+                }
+                [classpath appendString:entryFile];
+            }
+        }
+    }
+    return classpath;
 }
 
 +(void)appendCommonSystemArguments:(NSMutableArray*)argumentsArray dictionary:(NSDictionary*)dictionary {
+    NSArray* options = [dictionary valueForKey:@"JVMOptions"];
+    if (options != nil && [options count] > 0) {
+        for (id option in options) {
+            [argumentsArray addObject:option];
+        }
+    }
 }
 
 +(void)appendCommonApplicationArguments:(NSMutableArray*)argumentsArray dictionary:(NSDictionary*)dictionary {
+    NSArray* arguments = [dictionary valueForKey:@"JVMArguments"];
+    if (arguments != nil && [arguments count] > 0) {
+        for (id argument in arguments) {
+            [argumentsArray addObject:argument];
+        }
+    }
 }
 
 @end
