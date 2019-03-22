@@ -48,6 +48,11 @@ The plugin will automatically be executed during the `package` phase when it is 
             </plist>
             <dmg>
                 <generate>true</generate>
+                <additionalResources>
+                    <additionalResource>
+                        <directory>src/bundle/macos/distribution</directory> 
+                    </additionalResource>
+                </additionalResources>
             </dmg>
         </configuration>
     </plugin>
@@ -85,6 +90,8 @@ The following other properties can be added to the `dmg` element configuring the
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
 | `generate` | Boolean | No | `false` | Whether or not to create a `DMG` file. |
+| `additionalResources` | List<Fileset> | No | | Additional files to be copied into the archive. |
+| `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 
 # Development
 

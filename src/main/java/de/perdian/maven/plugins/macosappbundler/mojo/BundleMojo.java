@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -22,6 +25,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.model.fileset.FileSet;
+import org.apache.maven.shared.model.fileset.util.FileSetManager;
+import org.apache.maven.shared.utils.cli.Commandline;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
@@ -71,6 +77,18 @@ public class BundleMojo extends AbstractMojo {
             this.getLog().info("Generating Info.plist");
             this.generatePlist(new File(appDirectory, "Contents/"));
 
+            if (this.dmg.additionalResources != null && !this.dmg.additionalResources.isEmpty()) {
+                this.getLog().info("Copy additional resources");
+                this.copyAdditionalDmgResources(this.dmg.additionalResources, bundleDirectory);
+            }
+            if (this.dmg.createApplicationsSymlink) {
+                this.getLog().info("Create Applications Symlink");
+                try {
+                    Files.createSymbolicLink(new File(bundleDirectory, "Applications").toPath(), Paths.get("/Applications"));
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Cannot create link to Applications folder at: " + new File(bundleDirectory, "Applications").getAbsolutePath(), e);
+                }
+            }
             if (this.dmg.generate) {
                 this.getLog().info("Generating DMG archive");
                 this.generateDmgArchive(bundleDirectory);
@@ -182,8 +200,43 @@ public class BundleMojo extends AbstractMojo {
         }
     }
 
-    private void generateDmgArchive(File bundleDirectory) {
-        throw new UnsupportedOperationException("DMG archive generation not supported yet!");
+    private void generateDmgArchive(File bundleDirectory) throws MojoExecutionException, MojoFailureException {
+        File buildDirectory = new File(this.project.getBuild().getDirectory());
+        File dmgFile = new File(buildDirectory, this.project.getBuild().getFinalName() + ".dmg");
+        try {
+            Commandline dmgCommandLine = new Commandline();
+            dmgCommandLine.setExecutable("hdiutil");
+            dmgCommandLine.createArg().setValue("create");
+            dmgCommandLine.createArg().setValue("-srcfolder");
+            dmgCommandLine.createArg().setValue(bundleDirectory.getAbsolutePath());
+            dmgCommandLine.createArg().setValue(dmgFile.getAbsolutePath());
+            dmgCommandLine.createArg().setValue("-volname");
+            dmgCommandLine.createArg().setValue(this.project.getBuild().getFinalName());
+            dmgCommandLine.execute().waitFor();
+        } catch (Exception e) {
+            throw new MojoExecutionException("Cannot generate DMG archive at: " + dmgFile.getAbsolutePath(), e);
+        }
+    }
+
+    private void copyAdditionalDmgResources(List<FileSet> additionalResources, File bundleDirectory) throws MojoExecutionException, MojoFailureException {
+        try {
+            FileSetManager fileSetManager = new FileSetManager();
+            for (FileSet fileSet : additionalResources) {
+                File fileSetDirectory = new File(fileSet.getDirectory());
+                Map<String, String> mappedFiles = fileSetManager.mapIncludedFiles(fileSet);
+                if (!fileSetDirectory.isAbsolute()) {
+                    fileSetDirectory = new File(this.project.getBasedir(), fileSet.getDirectory());
+                }
+                for (Map.Entry<String, String> mappedFile : mappedFiles.entrySet()) {
+                    File sourceFile = new File(fileSetDirectory, mappedFile.getKey());
+                    File targetFile = new File(bundleDirectory, mappedFile.getKey());
+                    FileUtils.copyFile(sourceFile, targetFile);
+                }
+            }
+        } catch (Exception e) {
+            this.getLog().error("Cannot copy additional resources", e);
+            throw new MojoExecutionException("Cannot copy additional resources", e);
+        }
     }
 
 }

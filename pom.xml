@@ -34,6 +34,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <file-management.version>3.0.0</file-management.version>
         <maven.version>3.6.0</maven.version>
     </properties>
 
@@ -94,6 +95,11 @@
             <artifactId>maven-core</artifactId>
             <version>${maven.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>file-management</artifactId>
+            <version>${file-management.version}</version>
+        </dependency>        
     </dependencies>
 
     <profiles>
