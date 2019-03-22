@@ -75,6 +75,7 @@ The following values can be configured:
 | `JVMVersion` | String | No | | The Java version your application needs to work. Can either be an explicit version String like `11.0.1`, a major version like `11` (signalizing that *any* Java 11 runtime is sufficient) or a value like `11+` (signalizing that *any* Java 11 *or higher* runtime is sufficient). |
 | `JVMOptions` | Array of Strings | No | | Additional parameters (`-D` parameters) to be passed to the runtime. |
 | `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the runtime. |
+| `JVMRuntimePath` | String | No | | The exact location of the JVM. |
 
 ## DMG configuration
 
