@@ -1,0 +1,125 @@
+package de.perdian.maven.plugins.macosappbundler.mojo.model;
+
+import java.io.StringWriter;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+public class PlistConfiguration {
+
+    @Parameter
+    public String CFBundleIconFile = null;
+
+    @Parameter(defaultValue = "${groupId}.${artifactId}")
+    public String CFBundleIdentifier = null;
+
+    @Parameter(defaultValue = "${project.name}")
+    public String CFBundleDisplayName = null;
+
+    @Parameter(defaultValue = "${project.name}")
+    public String CFBundleName = null;
+
+    @Parameter(defaultValue = "${version}")
+    public String CFBundleShortVersionString = null;
+
+    @Parameter(defaultValue = "JavaLauncher")
+    public String CFBundleExecutable = null;
+
+    @Parameter
+    public String JVMVersion = null;
+
+    @Parameter
+    public String JVMMainClassName = null;
+
+    @Parameter
+    public String JVMMainModuleName = null;
+
+    @Parameter
+    public List<String> JVMOptions = null;
+
+    @Parameter
+    public List<String> JVMArguments = null;
+
+    @Parameter
+    public String JVMRuntimePath = null;
+
+    public String toXmlString() throws Exception {
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+        StringWriter writer = new StringWriter();
+        writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        writer.append("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
+        transformer.transform(new DOMSource(this.toXmlDocument()), new StreamResult(writer));
+        return writer.toString();
+
+    }
+
+    private Document toXmlDocument() throws Exception {
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+        document.appendChild(document.getImplementation().createDocumentType("plist", "-//Apple//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd"));
+        Element dictElement = document.createElement("dict");
+        this.appendKeyWithString(dictElement, document, "CFBundleDisplayName", this.CFBundleDisplayName);
+        this.appendKeyWithString(dictElement, document, "CFBundleExecutable", this.CFBundleExecutable);
+        this.appendKeyWithString(dictElement, document, "CFBundleIconFile", this.CFBundleIconFile);
+        this.appendKeyWithString(dictElement, document, "CFBundleIdentifier", this.CFBundleIdentifier);
+        this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
+        this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
+        this.appendKeyWithArrayOfStrings(dictElement, document, "JVMArguments", this.JVMArguments);
+        this.appendKeyWithString(dictElement, document, "JVMMainClassName", this.JVMMainClassName);
+        this.appendKeyWithString(dictElement, document, "JVMMainModuleName", this.JVMMainModuleName);
+        this.appendKeyWithArrayOfStrings(dictElement, document, "JVMOptions", this.JVMOptions);
+        this.appendKeyWithString(dictElement, document, "JVMRuntimePath", this.JVMRuntimePath);
+        this.appendKeyWithString(dictElement, document, "JVMVersion", this.JVMVersion);
+        Element plistElement = document.createElement("plist");
+        plistElement.setAttribute("version", "1.0");
+        plistElement.appendChild(dictElement);
+        document.appendChild(plistElement);
+        return document;
+    }
+
+    private void appendKeyWithString(Element dictElement, Document document, String key, String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent(key);
+            dictElement.appendChild(keyElement);
+            Element stringElement = document.createElement("string");
+            stringElement.setTextContent(value);
+            dictElement.appendChild(stringElement);
+        }
+    }
+
+    private void appendKeyWithArrayOfStrings(Element dictElement, Document document, String key, List<String> value) {
+        if (value != null && !value.isEmpty()) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent(key);
+            dictElement.appendChild(keyElement);
+            Element arrayElement = document.createElement("array");
+            for (String valueItem : value) {
+                if (!StringUtils.isEmpty(valueItem)) {
+                    Element stringElement = document.createElement("string");
+                    stringElement.setTextContent(valueItem);
+                    arrayElement.appendChild(stringElement);
+                }
+            }
+            dictElement.appendChild(arrayElement);
+        }
+    }
+
+}
