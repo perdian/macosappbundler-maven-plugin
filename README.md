@@ -97,6 +97,7 @@ The following values can be configured:
 | `JVMOptions` | Array of Strings | No | | Additional parameters (`-D` parameters) to be passed to the runtime. |
 | `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the runtime. |
 | `JVMRuntimePath` | String | No | | The exact location of the JVM. |
+| `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
 
 ## DMG configuration
 
@@ -117,7 +118,7 @@ Building the native part is fully integrated into the Maven lifecycle, so all yo
     $ git clone https://github.com/perdian/macosappbundler-maven-plugin.git
     $ mvn clean install
 
-I am aware that my understanding of Objective C is very basic - I'm a Java developer by heart and going back to using and pointers and (somehow) manual memory management feels pretty strange. So a lot of what's in the code is highly cargo culted from tutorials and answers on Stackoverflow, but hey: It works!
+I am aware that my understanding of Objective C is very basic - I'm a Java developer by heart and going back to using pointers and (somewhat) manual memory management feels pretty strange. So a lot of what's in the code is highly cargo culted from tutorials and answers on Stackoverflow, but hey: It works!
 
 # Motivation and credits
 
