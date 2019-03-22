@@ -2,9 +2,8 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
 
 # Usage
 
-The plugin will automatically detect whether or not the project is a Java 9+ module by checking if a source file `module-info.java` can be found in the projects classpath. If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be set.
-
-The plugin will automatically be executed during the `package` phase when it is included in the `pom.xml` of your project.
+The plugin will detect whether or not the project is a Java 9+ module by checking if the `plist` property `JVMMainModuleName` is present. 
+If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be used.
 
 ## Minimum example
 
@@ -19,6 +18,14 @@ The plugin will automatically be executed during the `package` phase when it is 
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
             </plist>
         </configuration>
+        <executions>
+            <execution>
+                <phase>package</phase>
+                <goals>
+                    <goal>bundle</goal>
+                </goals>
+            </execution>
+        </executions>
     </plugin>
  ...
 ```
@@ -55,6 +62,14 @@ The plugin will automatically be executed during the `package` phase when it is 
                 </additionalResources>
             </dmg>
         </configuration>
+        <executions>
+            <execution>
+                <phase>package</phase>
+                <goals>
+                    <goal>bundle</goal>
+                </goals>
+            </execution>
+        </executions>
     </plugin>
  ...
 ```
