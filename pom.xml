@@ -4,9 +4,9 @@
     <groupId>de.perdian.maven.plugins</groupId>
     <artifactId>macosappbundler-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
 
-    <name>macOS App Bundler Plugin</name>
+    <name>macOS app bundler Maven plugin</name>
     <description>Maven plugin to create a macOS application bundle</description>
     <url>https://github.com/perdian/macosappbundler-maven-plugin</url>
 
