@@ -1,11 +1,13 @@
+# macOS app bundler Maven plugin
+
 Maven plugin for creating a native [macOS bundle](https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW19) containing all dependencies required by a Maven project.
 
-# Usage
+[![Maven Central](https://img.shields.io/maven-central/v/de.perdian.maven.plugins/macosappbundler-maven-plugin.svg)](https://mvnrepository.com/artifact/de.perdian.maven.plugins/macosappbundler-maven-plugin)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://badges.mit-license.org)
 
-The plugin will detect whether or not the project is a Java 9+ module by checking if the `plist` property `JVMMainModuleName` is present. 
-If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be used.
+## Usage
 
-## Minimum example
+### Minimum example
 
 ```xml
  ...
@@ -30,7 +32,7 @@ If that's the case the launcher will use the *modulepath*. Otherwise the regular
  ...
 ```
 
-## Extended example
+### Extended example
 
 ```xml
  ...
@@ -57,7 +59,7 @@ If that's the case the launcher will use the *modulepath*. Otherwise the regular
                 <generate>true</generate>
                 <additionalResources>
                     <additionalResource>
-                        <directory>src/bundle/macos/distribution</directory> 
+                        <directory>src/bundle/macos/distribution</directory>
                     </additionalResource>
                 </additionalResources>
             </dmg>
@@ -74,8 +76,15 @@ If that's the case the launcher will use the *modulepath*. Otherwise the regular
  ...
 ```
 
+## Features
 
-## Property list Configuration
+After executing the goal during (e.g. during the `package` phase as shown in the example above) the macOS application bundle will be located in the `PROJECT_NAME.app` directory inside the `target` directory, where `PROJECT_NAME` equals the bundle name entered within the `CFBundleName` setting inside the `plist` configuration, or the name of the Maven project (`${project.name}`) if the value is not present inside the `plist` configuration.
+
+The plugin will detect whether or not the project is a Java 9+ module by checking if the `plist` property `JVMMainModuleName` is present. If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be used.
+
+## Configuration
+
+### Property list Configuration
 
 The values within the `plist` element are directly transfered to the `Info.plist` file within the application bundle. To keep the usage within the code consistent they use the same keys within the `pom.xml` configuration as they do within the `Info.plist`.
 
@@ -99,7 +108,7 @@ The following values can be configured:
 | `JVMRuntimePath` | String | No | | The exact location of the JVM. |
 | `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
 
-## DMG configuration
+### DMG configuration
 
 The following other properties can be added to the `dmg` element configuring the generation of the DMG file at the end of the build:
 
@@ -109,17 +118,27 @@ The following other properties can be added to the `dmg` element configuring the
 | `additionalResources` | List<Fileset> | No | | Additional files to be copied into the archive. |
 | `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 
-# Development
+## Development
 
 The project consists of two main parts: The regular *Maven plugin* (written in Java) and the *native macOS launcher* (written in Objective C).
 
-Building the native part is fully integrated into the Maven lifecycle, so all you need to build the plugin is:
+Building the native part is fully integrated into the Maven lifecycle, so all you need to do to build the plugin is:
 
     $ git clone https://github.com/perdian/macosappbundler-maven-plugin.git
     $ mvn clean install
 
 I am aware that my understanding of Objective C is very basic - I'm a Java developer by heart and going back to using pointers and (somewhat) manual memory management feels pretty strange. So a lot of what's in the code is highly cargo culted from tutorials and answers on Stackoverflow, but hey: It works!
 
-# Motivation and credits
+## Authors
+
+- [**Christian Robert**](http://www.perdian.de)
+
+See also the [list of contributors](https://github.com/perdian/macosappbundler-maven-plugin/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
 
 I originally used and have been highly influenced by the [`appbundle-maven-plugin`](https://github.com/federkasten/appbundle-maven-plugin) from [`federkasten`](https://github.com/federkasten). Unfortunately the plugin stopped working with Java versions 10 and above plus it didn't provide support for Java 9+ module projects.
