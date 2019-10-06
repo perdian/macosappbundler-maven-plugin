@@ -51,6 +51,7 @@ public class DmgGenerator {
     private DmgConfiguration getDmgConfiguration() {
         return this.dmgConfiguration;
     }
+
     private void setDmgConfiguration(DmgConfiguration dmgConfiguration) {
         this.dmgConfiguration = dmgConfiguration;
     }
@@ -58,6 +59,7 @@ public class DmgGenerator {
     private Log getLog() {
         return this.log;
     }
+
     private void setLog(Log log) {
         this.log = log;
     }
@@ -106,7 +108,10 @@ public class DmgGenerator {
             dmgCommandLine.createArg().setValue(dmgFile.getAbsolutePath());
             dmgCommandLine.createArg().setValue("-volname");
             dmgCommandLine.createArg().setValue(this.getVolumeName());
-            dmgCommandLine.execute().waitFor();
+            int returnValue = dmgCommandLine.execute().waitFor();
+            if (returnValue != 0) {
+                throw new Exception("Command 'hdiutil' exited with status " + returnValue);
+            }
         } catch (Exception e) {
             throw new MojoExecutionException("Cannot generate DMG archive at: " + dmgFile.getAbsolutePath(), e);
         }
@@ -136,6 +141,7 @@ public class DmgGenerator {
     private String getVolumeName() {
         return this.volumeName;
     }
+
     private void setVolumeName(String volumeName) {
         this.volumeName = volumeName;
     }
