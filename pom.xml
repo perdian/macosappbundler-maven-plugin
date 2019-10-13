@@ -4,7 +4,7 @@
     <groupId>de.perdian.maven.plugins</groupId>
     <artifactId>macosappbundler-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.2.0</version>
 
     <name>macOS app bundler Maven plugin</name>
     <description>Maven plugin to create a macOS application bundle</description>
@@ -99,7 +99,7 @@
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>file-management</artifactId>
             <version>${file-management.version}</version>
-        </dependency>        
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -159,7 +159,7 @@
                         </executions>
                         <configuration>
                             <source>8</source>
-                        </configuration> 
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.kohsuke</groupId>
