@@ -32,4 +32,10 @@ public class DmgConfiguration {
     @Parameter
     public boolean createApplicationsSymlink = true;
 
+    @Parameter
+    public boolean useGenIsoImage = false;
+
+    @Parameter
+    public boolean autoFallback = false;
+
 }
