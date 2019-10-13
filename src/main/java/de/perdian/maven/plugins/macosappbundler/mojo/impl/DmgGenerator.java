@@ -32,6 +32,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
+import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.Commandline;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
@@ -100,20 +101,55 @@ public class DmgGenerator {
 
     private void generateDmgArchive(File bundleDirectory, File dmgFile) throws MojoExecutionException {
         try {
-            Commandline dmgCommandLine = new Commandline();
-            dmgCommandLine.setExecutable("hdiutil");
-            dmgCommandLine.createArg().setValue("create");
-            dmgCommandLine.createArg().setValue("-srcfolder");
-            dmgCommandLine.createArg().setValue(bundleDirectory.getAbsolutePath());
-            dmgCommandLine.createArg().setValue(dmgFile.getAbsolutePath());
-            dmgCommandLine.createArg().setValue("-volname");
-            dmgCommandLine.createArg().setValue(this.getVolumeName());
-            int returnValue = dmgCommandLine.execute().waitFor();
-            if (returnValue != 0) {
-                throw new Exception("Command 'hdiutil' exited with status " + returnValue);
+            if (dmgConfiguration.useGenIsoImage) {
+                generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, false);
+            } else {
+                generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, false);
             }
         } catch (Exception e) {
             throw new MojoExecutionException("Cannot generate DMG archive at: " + dmgFile.getAbsolutePath(), e);
+        }
+    }
+
+    private void generateDmgArchiveGenIsoImage(File bundleDirectory, File dmgFile, boolean fallback) throws Exception {
+        Commandline dmgCommandLine = new Commandline();
+        dmgCommandLine.setExecutable("genisoimage");
+        dmgCommandLine.createArg().setValue("-D");
+        dmgCommandLine.createArg().setValue("-V");
+        dmgCommandLine.createArg().setValue(this.getVolumeName());
+        dmgCommandLine.createArg().setValue("-no-pad");
+        dmgCommandLine.createArg().setValue("-r");
+        dmgCommandLine.createArg().setValue("-apple");
+        dmgCommandLine.createArg().setValue("-quiet");
+        dmgCommandLine.createArg().setValue("-o");
+        dmgCommandLine.createArg().setValue(dmgFile.getAbsolutePath());
+        dmgCommandLine.createArg().setValue(bundleDirectory.getAbsolutePath());
+        int returnValue = dmgCommandLine.execute().waitFor();
+        if (returnValue != 0) {
+            if (dmgConfiguration.autoFallback && !fallback) {
+                generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, true);
+            } else {
+                throw new Exception("Command 'genisoimage' exited with status " + returnValue);
+            }
+        }
+    }
+
+    private void generateDmgArchiveHdiUtil(File bundleDirectory, File dmgFile, boolean fallback) throws Exception {
+        Commandline dmgCommandLine = new Commandline();
+        dmgCommandLine.setExecutable("hdiutil");
+        dmgCommandLine.createArg().setValue("create");
+        dmgCommandLine.createArg().setValue("-srcfolder");
+        dmgCommandLine.createArg().setValue(bundleDirectory.getAbsolutePath());
+        dmgCommandLine.createArg().setValue(dmgFile.getAbsolutePath());
+        dmgCommandLine.createArg().setValue("-volname");
+        dmgCommandLine.createArg().setValue(this.getVolumeName());
+        int returnValue = dmgCommandLine.execute().waitFor();
+        if (returnValue != 0) {
+            if (dmgConfiguration.autoFallback && !fallback) {
+                generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, true);
+            } else {
+                throw new Exception("Command 'hdiutil' exited with status " + returnValue);
+            }
         }
     }
 
