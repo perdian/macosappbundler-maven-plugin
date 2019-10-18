@@ -74,7 +74,15 @@ public class BundleMojo extends AbstractMojo {
 
             if (this.dmg.generate) {
                 File bundleDirectory = new File(targetDirectory, "bundle");
-                File dmgFile = new File(targetDirectory, appName + ".dmg");
+                String dmgFileName;
+                if (this.dmg.appendVersion) {
+                    dmgFileName = appName + "_" + this.project.getVersion() + ".dmg";
+                } else if (this.dmg.dmgFileName == null || this.dmg.dmgFileName.isEmpty()) {
+                    dmgFileName = appName + ".dmg";
+                } else {
+                    dmgFileName = this.dmg.dmgFileName + ".dmg";
+                }
+                File dmgFile = new File(targetDirectory, dmgFileName);
                 DmgGenerator dmgGenerator = new DmgGenerator(this.dmg, appName, this.getLog());
                 dmgGenerator.generateDmg(this.project, appDirectory, bundleDirectory, dmgFile);
             }

@@ -119,6 +119,8 @@ The following other properties can be added to the `dmg` element configuring the
 | `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 | `useGenIsoImage` | Boolean | No | `false` | Whether or not to use `genisoimage` to create the archive. Default is `hdiutil`. |
 | `autoFallback` | Boolean | No | `false` | If `true`, try the other archive generation method when the first one fails. (e.g. run `hdiutil` when `genisoimage` fails and vice-versa) |
+| `appendVersion` | Boolean | No | `true` | If `true`, append version to `.dmg` name
+| `dmgFileName` | String | No | `null` | If not `null` or empty, the supplied string will be used as the name (`.dmg` will be appended).
 
 ## Development
 

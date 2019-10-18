@@ -38,4 +38,10 @@ public class DmgConfiguration {
     @Parameter
     public boolean autoFallback = false;
 
+    @Parameter
+    public boolean appendVersion = true;
+
+    @Parameter
+    public String dmgFileName = null;
+
 }
