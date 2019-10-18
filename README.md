@@ -14,7 +14,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -39,7 +39,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -119,6 +119,8 @@ The following other properties can be added to the `dmg` element configuring the
 | `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 | `useGenIsoImage` | Boolean | No | `false` | Whether or not to use `genisoimage` to create the archive. Default is `hdiutil`. |
 | `autoFallback` | Boolean | No | `false` | If `true`, try the other archive generation method when the first one fails. (e.g. run `hdiutil` when `genisoimage` fails and vice-versa) |
+| `appendVersion` | Boolean | No | `true` | If `true`, append version to `.dmg` name
+| `dmgFileName` | String | No | `null` | If not `null` or empty, the supplied string will be used as the name (`.dmg` will be appended).
 
 ## Development
 
