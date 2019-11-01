@@ -32,7 +32,6 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
-import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.Commandline;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
@@ -101,7 +100,7 @@ public class DmgGenerator {
 
     private void generateDmgArchive(File bundleDirectory, File dmgFile) throws MojoExecutionException {
         try {
-            if (dmgConfiguration.useGenIsoImage) {
+            if (this.getDmgConfiguration().useGenIsoImage) {
                 generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, false);
             } else {
                 generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, false);
@@ -126,7 +125,7 @@ public class DmgGenerator {
         dmgCommandLine.createArg().setValue(bundleDirectory.getAbsolutePath());
         int returnValue = dmgCommandLine.execute().waitFor();
         if (returnValue != 0) {
-            if (dmgConfiguration.autoFallback && !fallback) {
+            if (this.getDmgConfiguration().autoFallback && !fallback) {
                 generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, true);
             } else {
                 throw new Exception("Command 'genisoimage' exited with status " + returnValue);
@@ -145,7 +144,7 @@ public class DmgGenerator {
         dmgCommandLine.createArg().setValue(this.getVolumeName());
         int returnValue = dmgCommandLine.execute().waitFor();
         if (returnValue != 0) {
-            if (dmgConfiguration.autoFallback && !fallback) {
+            if (this.getDmgConfiguration().autoFallback && !fallback) {
                 generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, true);
             } else {
                 throw new Exception("Command 'hdiutil' exited with status " + returnValue);
