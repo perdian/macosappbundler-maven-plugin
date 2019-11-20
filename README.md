@@ -14,7 +14,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.2</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -39,7 +39,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.2</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
