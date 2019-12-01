@@ -14,6 +14,6 @@ clang \
   -I ${INCLUDE_JAVA_DARWIN} \
   -isysroot ${SYSROOT} \
   -framework Cocoa \
-  -mmacosx-version-min=10.10 \
+  -mmacosx-version-min=10.12 \
   -o ${EXECUTABLE_FILE} \
   ${INPUT_FILES}
