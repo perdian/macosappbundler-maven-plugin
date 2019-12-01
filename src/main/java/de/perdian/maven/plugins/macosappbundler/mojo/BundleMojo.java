@@ -17,7 +17,9 @@
 package de.perdian.maven.plugins.macosappbundler.mojo;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -67,26 +69,35 @@ public class BundleMojo extends AbstractMojo {
             String appName = StringUtils.defaultString(this.plist.CFBundleName, this.project.getBuild().getFinalName());
             File targetDirectory = new File(this.project.getBuild().getDirectory());
             File appDirectory = new File(targetDirectory, appName + ".app");
-            this.getLog().info("Creating app directory at: " + appDirectory.getAbsolutePath());
-            appDirectory.mkdirs();
+            if (!appDirectory.exists()) {
+                this.getLog().info("Creating app directory at: " + appDirectory.getAbsolutePath());
+                appDirectory.mkdirs();
+            }
             AppGenerator appGenerator = new AppGenerator(this.plist, this.getLog());
             appGenerator.generateApp(this.project, appDirectory);
 
             if (this.dmg.generate) {
                 File bundleDirectory = new File(targetDirectory, "bundle");
-                String dmgFileName;
-                if (this.dmg.appendVersion) {
-                    dmgFileName = appName + "_" + this.project.getVersion() + ".dmg";
-                } else if (this.dmg.dmgFileName == null || this.dmg.dmgFileName.isEmpty()) {
-                    dmgFileName = appName + ".dmg";
-                } else {
-                    dmgFileName = this.dmg.dmgFileName + ".dmg";
-                }
-                File dmgFile = new File(targetDirectory, dmgFileName);
+                File dmgFile = new File(targetDirectory, this.createDmgFileName(appName));
                 DmgGenerator dmgGenerator = new DmgGenerator(this.dmg, appName, this.getLog());
                 dmgGenerator.generateDmg(this.project, appDirectory, bundleDirectory, dmgFile);
+                try {
+                    FileUtils.deleteDirectory(bundleDirectory);
+                } catch (IOException e) {
+                    this.getLog().debug("Cannot delete bundle directory at: " + bundleDirectory.getAbsolutePath(), e);
+                }
             }
 
+        }
+    }
+
+    private String createDmgFileName(String appName) {
+        if (this.dmg.appendVersion) {
+            return appName + "_" + this.project.getVersion() + ".dmg";
+        } else if (this.dmg.dmgFileName == null || this.dmg.dmgFileName.isEmpty()) {
+            return appName + ".dmg";
+        } else {
+            return this.dmg.dmgFileName + ".dmg";
         }
     }
 

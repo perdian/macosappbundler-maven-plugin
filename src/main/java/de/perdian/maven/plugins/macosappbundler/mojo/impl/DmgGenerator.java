@@ -39,8 +39,8 @@ import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
 public class DmgGenerator {
 
     private DmgConfiguration dmgConfiguration = null;
-    private Log log = null;
     private String volumeName = null;
+    private Log log = null;
 
     public DmgGenerator(DmgConfiguration dmgConfiguration, String volumeName, Log log) {
         this.setDmgConfiguration(dmgConfiguration);
@@ -48,27 +48,14 @@ public class DmgGenerator {
         this.setLog(log);
     }
 
-    private DmgConfiguration getDmgConfiguration() {
-        return this.dmgConfiguration;
-    }
-
-    private void setDmgConfiguration(DmgConfiguration dmgConfiguration) {
-        this.dmgConfiguration = dmgConfiguration;
-    }
-
-    private Log getLog() {
-        return this.log;
-    }
-
-    private void setLog(Log log) {
-        this.log = log;
-    }
-
     public void generateDmg(MavenProject project, File appDirectory, File bundleDirectory, File dmgFile) throws MojoExecutionException {
 
         try {
             File bundleAppDirectory = new File(bundleDirectory, appDirectory.getName());
-            bundleAppDirectory.mkdirs();
+            if (!bundleAppDirectory.exists()) {
+                this.getLog().debug("Creating bundle app directory at: " + bundleAppDirectory.getAbsolutePath());
+                bundleAppDirectory.mkdirs();
+            }
             Iterator<Path> files = Files.walk(appDirectory.toPath()).iterator();
             while (files.hasNext()) {
                 Path sourcePathAbsolute = files.next();
@@ -101,9 +88,9 @@ public class DmgGenerator {
     private void generateDmgArchive(File bundleDirectory, File dmgFile) throws MojoExecutionException {
         try {
             if (this.getDmgConfiguration().useGenIsoImage) {
-                generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, false);
+                this.generateDmgArchiveGenIsoImage(bundleDirectory, dmgFile, false);
             } else {
-                generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, false);
+                this.generateDmgArchiveHdiUtil(bundleDirectory, dmgFile, false);
             }
         } catch (Exception e) {
             throw new MojoExecutionException("Cannot generate DMG archive at: " + dmgFile.getAbsolutePath(), e);
@@ -173,12 +160,25 @@ public class DmgGenerator {
         }
     }
 
+    private DmgConfiguration getDmgConfiguration() {
+        return this.dmgConfiguration;
+    }
+    private void setDmgConfiguration(DmgConfiguration dmgConfiguration) {
+        this.dmgConfiguration = dmgConfiguration;
+    }
+
     private String getVolumeName() {
         return this.volumeName;
     }
-
     private void setVolumeName(String volumeName) {
         this.volumeName = volumeName;
+    }
+
+    private Log getLog() {
+        return this.log;
+    }
+    private void setLog(Log log) {
+        this.log = log;
     }
 
 }
