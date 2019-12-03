@@ -38,6 +38,8 @@ import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 public class AppGenerator {
 
     private PlistConfiguration plistConfiguration = null;
+    private boolean includeJdk = false;
+    private String jdkPath = null;
     private Log log = null;
 
     public AppGenerator(PlistConfiguration plistConfiguration, Log log) {
@@ -47,6 +49,7 @@ public class AppGenerator {
 
     public void generateApp(MavenProject project, File appDirectory) throws MojoExecutionException {
         this.copyApplicationDependencies(project, new File(appDirectory, "Contents/Java"));
+        this.copyJdk(new File(appDirectory, "Contents/Java/jdk"));
         this.copyNativeExecutable(new File(appDirectory, "Contents/MacOS"));
         this.generatePlist(project, new File(appDirectory, "Contents/"));
     }
@@ -157,11 +160,53 @@ public class AppGenerator {
         }
     }
 
+    private void copyJdk(File targetDirectory) throws MojoExecutionException {
+        if (this.isIncludeJdk()) {
+            if (StringUtils.isEmpty(this.getJdkPath())) {
+                this.getLog().info("Copy JDK from system default directory at: " + System.getProperty("java.home"));
+                this.copyJdkFromDirectory(targetDirectory, new File(System.getProperty("java.home")));
+            } else {
+                File jdkDirectory = new File(this.getJdkPath());
+                if (!jdkDirectory.exists()) {
+                    throw new MojoExecutionException("Specified JDK directory doesn't exist at: " + jdkDirectory.getAbsolutePath());
+                } else {
+                    this.getLog().info("Copy JDK from explicit directory at: " + System.getProperty("java.home"));
+                    this.copyJdkFromDirectory(targetDirectory, jdkDirectory);
+                }
+            }
+        }
+    }
+
+    private void copyJdkFromDirectory(File targetDirectory, File sourceDirectory) throws MojoExecutionException {
+        if (!targetDirectory.exists()) {
+            targetDirectory.mkdirs();
+        }
+        try {
+            FileUtils.copyDirectory(sourceDirectory, targetDirectory);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Cannot copy JDK from directory at: " + sourceDirectory.getAbsolutePath(), e);
+        }
+    }
+
     private PlistConfiguration getPlistConfiguration() {
         return this.plistConfiguration;
     }
     private void setPlistConfiguration(PlistConfiguration plistConfiguration) {
         this.plistConfiguration = plistConfiguration;
+    }
+
+    public boolean isIncludeJdk() {
+        return this.includeJdk;
+    }
+    public void setIncludeJdk(boolean includeJdk) {
+        this.includeJdk = includeJdk;
+    }
+
+    public String getJdkPath() {
+        return this.jdkPath;
+    }
+    public void setJdkPath(String jdkPath) {
+        this.jdkPath = jdkPath;
     }
 
     private Log getLog() {

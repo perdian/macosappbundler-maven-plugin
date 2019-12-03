@@ -122,6 +122,29 @@ The following other properties can be added to the `dmg` element configuring the
 | `appendVersion` | Boolean | No | `true` | If `true`, append version to `.dmg` name
 | `dmgFileName` | String | No | `null` | If not `null` or empty, the supplied string will be used as the name (`.dmg` will be appended).
 
+### JDK inclusion
+
+To be completely self-sustaining, the plugin supports including a JDK into the target application.
+That JDK will then be used to launch the application, so there are not dependencies to a JDK being installed locally.
+
+```xml
+ ...
+    <configuration>
+      <jdk>
+        <include>true</include>
+        <path>/where/your/jdk/is/instlled</path>
+      </jdk>
+    </configuration>
+ ...
+```
+
+The following parameters can be set below the `jdk` configuration element:
+
+| Key | Type | Required? | Default | Description |
+| --- | ---- | --------- | ------- | ----------- |
+| `include` | Boolean | No | `false` | Whether or not to include the JDK in the application. |
+| `path` | String | No | | The location of the JDK to be included. If no location is provided then the *currently used JDK* will be added to the application, which is the JDK that is used by the Maven script executing the build. |
+
 ## Development
 
 The project consists of two main parts: The regular *Maven plugin* (written in Java) and the *native macOS launcher* (written in Objective C).

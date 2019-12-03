@@ -34,6 +34,7 @@ import org.apache.maven.project.MavenProject;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.JdkConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 
 /**
@@ -51,6 +52,9 @@ public class BundleMojo extends AbstractMojo {
 
     @Parameter
     private DmgConfiguration dmg = new DmgConfiguration();
+
+    @Parameter
+    private JdkConfiguration jdk = new JdkConfiguration();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -74,6 +78,8 @@ public class BundleMojo extends AbstractMojo {
                 appDirectory.mkdirs();
             }
             AppGenerator appGenerator = new AppGenerator(this.plist, this.getLog());
+            appGenerator.setIncludeJdk(this.jdk.include);
+            appGenerator.setJdkPath(this.jdk.path);
             appGenerator.generateApp(this.project, appDirectory);
 
             if (this.dmg.generate) {
