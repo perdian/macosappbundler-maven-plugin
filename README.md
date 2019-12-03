@@ -156,6 +156,11 @@ Building the native part is fully integrated into the Maven lifecycle, so all yo
 
 I am aware that my understanding of Objective C is very basic - I'm a Java developer by heart and going back to using pointers and (somewhat) manual memory management feels pretty strange. So a lot of what's in the code is highly cargo culted from tutorials and answers on Stackoverflow, but hey: It works!
 
+## Restrictions
+
+As the file structure of the JDK structure has changed beginning with Java 9, the native launcher will most likely fail if you plan to run your application with Java 8 or lower.
+However as Java 8 is end of life anyway, this shouldn't be a big issue. 
+
 ## Authors
 
 - [**Christian Robert**](http://www.perdian.de)
