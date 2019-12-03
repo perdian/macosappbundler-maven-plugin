@@ -39,7 +39,7 @@ public class AppGenerator {
 
     private PlistConfiguration plistConfiguration = null;
     private boolean includeJdk = false;
-    private String jdkPath = null;
+    private String jdkLocation = null;
     private Log log = null;
 
     public AppGenerator(PlistConfiguration plistConfiguration, Log log) {
@@ -162,15 +162,15 @@ public class AppGenerator {
 
     private void copyJdk(File targetDirectory) throws MojoExecutionException {
         if (this.isIncludeJdk()) {
-            if (StringUtils.isEmpty(this.getJdkPath())) {
+            if (StringUtils.isEmpty(this.getJdkLocation())) {
                 this.getLog().info("Copy JDK from system default directory at: " + System.getProperty("java.home"));
                 this.copyJdkFromDirectory(targetDirectory, new File(System.getProperty("java.home")));
             } else {
-                File jdkDirectory = new File(this.getJdkPath());
+                File jdkDirectory = new File(this.getJdkLocation());
                 if (!jdkDirectory.exists()) {
                     throw new MojoExecutionException("Specified JDK directory doesn't exist at: " + jdkDirectory.getAbsolutePath());
                 } else {
-                    this.getLog().info("Copy JDK from explicit directory at: " + System.getProperty("java.home"));
+                    this.getLog().info("Copy JDK from explicit directory at: " + jdkDirectory.getAbsolutePath());
                     this.copyJdkFromDirectory(targetDirectory, jdkDirectory);
                 }
             }
@@ -202,11 +202,11 @@ public class AppGenerator {
         this.includeJdk = includeJdk;
     }
 
-    public String getJdkPath() {
-        return this.jdkPath;
+    public String getJdkLocation() {
+        return this.jdkLocation;
     }
-    public void setJdkPath(String jdkPath) {
-        this.jdkPath = jdkPath;
+    public void setJdkLocation(String jdkLocation) {
+        this.jdkLocation = jdkLocation;
     }
 
     private Log getLog() {

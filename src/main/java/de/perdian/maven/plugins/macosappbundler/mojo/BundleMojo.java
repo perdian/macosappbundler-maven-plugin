@@ -79,7 +79,7 @@ public class BundleMojo extends AbstractMojo {
             }
             AppGenerator appGenerator = new AppGenerator(this.plist, this.getLog());
             appGenerator.setIncludeJdk(this.jdk.include);
-            appGenerator.setJdkPath(this.jdk.path);
+            appGenerator.setJdkLocation(this.jdk.location);
             appGenerator.generateApp(this.project, appDirectory);
 
             if (this.dmg.generate) {

@@ -24,6 +24,6 @@ public class JdkConfiguration {
     public boolean include = false;
 
     @Parameter
-    public String path = null;
+    public String location = null;
 
 }
