@@ -70,9 +70,15 @@
             log_info(@"Using explicit value for 'JVMRuntimePath' set in application dictionary for JVM directory: %@", explictJvmDirectory);
         }
         return explictJvmDirectory;
-    } else {
-        return [self resolveJvmDirectoryForVersion:javaVersion];
     }
+    NSBundle *applicationBundle = [NSBundle mainBundle];
+    NSString *applicationDirectory = [applicationBundle bundlePath];
+    NSString *jdkDataDirectory = [applicationDirectory stringByAppendingPathComponent:@"Contents/Java/jdk"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jdkDataDirectory isDirectory:NULL]) {
+        log_info(@"Using internally provided JDK at: %@", jdkDataDirectory);
+        return jdkDataDirectory;
+    }
+    return [self resolveJvmDirectoryForVersion:javaVersion];
 }
 
 +(NSString*)resolveJvmDylibLocation:(NSString*)jvmDirectory {
