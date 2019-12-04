@@ -163,7 +163,7 @@ However as Java 8 is end of life anyway, this shouldn't be a big issue.
 
 ## Authors
 
-- [**Christian Robert**](http://www.perdian.de)
+- [**Christian Seifert**](http://www.perdian.de)
 
 See also the [list of contributors](https://github.com/perdian/macosappbundler-maven-plugin/contributors) who participated in this project.
 

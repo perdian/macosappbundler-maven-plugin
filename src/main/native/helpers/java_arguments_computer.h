@@ -1,6 +1,6 @@
 /*
  * macOS app bundler Maven plugin
- * Copyright 2019 Christian Robert
+ * Copyright 2019 Christian Seifert
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,6 @@
 @interface JavaArgumentsComputer : NSObject {
 }
 
-+(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary; 
++(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary;
 
 @end
