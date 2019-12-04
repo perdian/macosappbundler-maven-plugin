@@ -14,7 +14,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -39,7 +39,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -159,7 +159,7 @@ I am aware that my understanding of Objective C is very basic - I'm a Java devel
 ## Restrictions
 
 As the file structure of the JDK structure has changed beginning with Java 9, the native launcher will most likely fail if you plan to run your application with Java 8 or lower.
-However as Java 8 is end of life anyway, this shouldn't be a big issue. 
+However as Java 8 is end of life anyway, this shouldn't be a big issue.
 
 ## Authors
 
