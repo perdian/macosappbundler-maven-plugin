@@ -4,6 +4,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
 
 [![Maven Central](https://img.shields.io/maven-central/v/de.perdian.maven.plugins/macosappbundler-maven-plugin.svg)](https://mvnrepository.com/artifact/de.perdian.maven.plugins/macosappbundler-maven-plugin)
 [![License](http://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build](https://img.shields.io/circleci/build/github/perdian/macosappbundler-maven-plugin/master)](https://circleci.com/gh/perdian/macosappbundler-maven-plugin)
 
 ## Usage
 
