@@ -10,6 +10,10 @@ jobs:
             - v1-dependencies-{{ checksum "pom.xml" }}
             - v1-dependencies-
       - run:
+          name: "Install dependencies"
+          command: |
+            sudo apt-get update && apt-get install clang
+      - run:
           name: "Build using Maven"
           command: |
             mvn -B clean package
