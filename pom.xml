@@ -52,6 +52,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${maven.compile-native-executable.skip}</skip>
                             <executable>${basedir}/compile-native-executable.sh</executable>
                         </configuration>
                     </execution>
