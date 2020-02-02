@@ -16,9 +16,10 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,11 +28,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 public class PlistConfiguration {
 
@@ -74,6 +73,9 @@ public class PlistConfiguration {
     @Parameter
     public String JVMLogLevel = null;
 
+    @Parameter
+    public Boolean NSHighResolutionCapable = null;
+
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -107,6 +109,7 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "JVMRuntimePath", this.JVMRuntimePath);
         this.appendKeyWithString(dictElement, document, "JVMVersion", this.JVMVersion);
         this.appendKeyWithString(dictElement, document, "JVMLogLevel", this.JVMLogLevel);
+        this.appendKeyWithString(dictElement, document, "NSHighResolutionCapable", this.NSHighResolutionCapable.toString());
         for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
             this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
         }
