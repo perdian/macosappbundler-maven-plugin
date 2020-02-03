@@ -108,6 +108,7 @@ The following values can be configured:
 | `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the runtime. |
 | `JVMRuntimePath` | String | No | | The exact location of the JVM. |
 | `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
+| `NSHighResolutionCapable` | Boolean | No | | Declares if the application supports rendering in HiDPI (Retina).
 
 ### DMG configuration
 
