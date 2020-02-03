@@ -75,7 +75,7 @@ public class PlistConfiguration {
     public String JVMLogLevel = null;
 
     @Parameter
-    public Boolean NSHighResolutionCapable = null;
+    public Boolean NSHighResolutionCapable = Boolean.TRUE;
 
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
