@@ -29,7 +29,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.*;
+import org.apache.maven.project.MavenProject;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
@@ -45,7 +45,7 @@ import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 public class BundleMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    private MavenProject project;
+    private MavenProject project = null;
 
     @Parameter(required = true)
     private PlistConfiguration plist = null;
@@ -58,7 +58,7 @@ public class BundleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
-        Validate.notNull(project, "MavenProject cannot be null");
+        Validate.notNull(this.getProject(), "MavenProject cannot be null");
         if (StringUtils.isEmpty(this.plist.JVMMainClassName) && StringUtils.isEmpty(this.plist.JVMMainModuleName)) {
             throw new MojoExecutionException("Neither 'JVMMainClassName' nor 'JVMMainModuleName' have been defined!");
         } else if (StringUtils.isNotEmpty(this.plist.JVMMainClassName) && StringUtils.isNotEmpty(this.plist.JVMMainModuleName)) {
@@ -110,9 +110,8 @@ public class BundleMojo extends AbstractMojo {
     }
 
     public MavenProject getProject() {
-        return project;
+        return this.project;
     }
-
     public void setProject(MavenProject project) {
         this.project = project;
     }
