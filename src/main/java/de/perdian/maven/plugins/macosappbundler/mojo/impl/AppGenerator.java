@@ -1,6 +1,7 @@
 /*
  * macOS app bundler Maven plugin
  * Copyright 2019 Christian Seifert
+ * Copyright 2020 Håvard Bakke
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +113,7 @@ public class AppGenerator {
                 File targetFile = new File(targetDirectory, targetFileName);
                 this.getLog().info("Copy native executable to: " + targetFile.getAbsolutePath());
                 try (InputStream nativeExecutableStream = nativeExecutableSource.openStream()) {
-                    FileUtils.copyToFile(nativeExecutableStream, targetFile);
+                    FileUtils.copyInputStreamToFile(nativeExecutableStream, targetFile);
                 }
                 targetFile.setExecutable(true);
             }

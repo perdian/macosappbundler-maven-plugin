@@ -1,6 +1,7 @@
 /*
  * macOS app bundler Maven plugin
  * Copyright 2019 Christian Seifert
+ * Copyright 2020 Håvard Bakke
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +55,12 @@ public class PlistConfiguration {
     public String CFBundleExecutable = null;
 
     @Parameter
+    public List<String> CFBundleURLTypes = null;
+
+    @Parameter
+    public String CFBundleDevelopmentRegion = null;
+
+    @Parameter
     public String JVMVersion = null;
 
     @Parameter
@@ -103,6 +110,8 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "CFBundleIdentifier", this.CFBundleIdentifier);
         this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
         this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
+        this.appendKeyWithString(dictElement, document, "CFBundleDevelopmentRegion", this.CFBundleDevelopmentRegion);
+        this.appendCFBundleURLTypes(dictElement, document, this.CFBundleURLTypes);
         this.appendKeyWithArrayOfStrings(dictElement, document, "JVMArguments", this.JVMArguments);
         this.appendKeyWithString(dictElement, document, "JVMMainClassName", this.JVMMainClassName);
         this.appendKeyWithString(dictElement, document, "JVMMainModuleName", this.JVMMainModuleName);
@@ -130,6 +139,20 @@ public class PlistConfiguration {
             stringElement.setTextContent(value);
             dictElement.appendChild(stringElement);
         }
+    }
+
+    private void appendCFBundleURLTypes(Element dictElement, Document document, List<String> value) {
+        if (value != null && !value.isEmpty()) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent("CFBundleURLTypes");
+            dictElement.appendChild(keyElement);
+            Element arrayElement = document.createElement("array");
+            Element arrayDictElement = document.createElement("dict");
+            appendKeyWithArrayOfStrings(arrayDictElement, document, "CFBundleURLSchemes", value);
+            arrayElement.appendChild(arrayDictElement);
+            dictElement.appendChild(arrayElement);
+        }
+
     }
 
     private void appendKeyWithArrayOfStrings(Element dictElement, Document document, String key, List<String> value) {

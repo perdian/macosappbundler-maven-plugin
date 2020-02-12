@@ -1,6 +1,7 @@
 /*
  * macOS app bundler Maven plugin
  * Copyright 2019 Christian Seifert
+ * Copyright 2020 Håvard Bakke
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +22,14 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.*;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
@@ -44,8 +44,8 @@ import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 @Mojo(name = "bundle", requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.PACKAGE)
 public class BundleMojo extends AbstractMojo {
 
-    @Component
-    private MavenProject project = null;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    private MavenProject project;
 
     @Parameter(required = true)
     private PlistConfiguration plist = null;
@@ -57,7 +57,8 @@ public class BundleMojo extends AbstractMojo {
     private JdkConfiguration jdk = new JdkConfiguration();
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
+        Validate.notNull(project, "MavenProject cannot be null");
         if (StringUtils.isEmpty(this.plist.JVMMainClassName) && StringUtils.isEmpty(this.plist.JVMMainModuleName)) {
             throw new MojoExecutionException("Neither 'JVMMainClassName' nor 'JVMMainModuleName' have been defined!");
         } else if (StringUtils.isNotEmpty(this.plist.JVMMainClassName) && StringUtils.isNotEmpty(this.plist.JVMMainModuleName)) {
@@ -66,6 +67,7 @@ public class BundleMojo extends AbstractMojo {
 
             this.plist.CFBundleDisplayName = StringUtils.defaultIfEmpty(this.plist.CFBundleDisplayName, this.project.getName());
             this.plist.CFBundleName = StringUtils.defaultIfEmpty(this.plist.CFBundleName, this.project.getName());
+            this.plist.CFBundleDevelopmentRegion = StringUtils.defaultIfEmpty(this.plist.CFBundleDevelopmentRegion, "English");
             this.plist.CFBundleIdentifier = StringUtils.defaultIfEmpty(this.plist.CFBundleIdentifier, this.project.getGroupId() + "." + this.project.getArtifactId());
             this.plist.CFBundleShortVersionString = StringUtils.defaultIfEmpty(this.plist.CFBundleShortVersionString, this.project.getVersion());
             this.plist.CFBundleExecutable = StringUtils.defaultIfEmpty(this.plist.CFBundleExecutable, "JavaLauncher");
@@ -107,4 +109,11 @@ public class BundleMojo extends AbstractMojo {
         }
     }
 
+    public MavenProject getProject() {
+        return project;
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
+    }
 }
