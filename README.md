@@ -45,6 +45,10 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
                 <CFBundleDisplayName>My supercool application</CFBundleDisplayName>
+                <CFBundleDevelopmentRegion>English</CFBundleDevelopmentRegion>
+                <CFBundleURLTypes>
+                    <string>msa</string>
+                </CFBundleURLTypes>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
                 <JVMVersion>11+</JVMVersion>
                 <JVMOptions>
@@ -101,6 +105,8 @@ The following values can be configured:
 | `CFBundleName` | String | No | `${project.name}` | The internal name of your application. |
 | `CFBundleShortVersionString` | String | No | `${version}` | The version of your application. |
 | `CFBundleExecutable` | String | No | `JavaLauncher` | The name of the executable within the application bundle. No user will ever see this but you may want to change it for debugging purposes when analyzing your application. |
+| `CFBundleDevelopmentRegion` | String | No | `English` | The default language and region for the bundle, as a language ID. |
+| `CFBundleURLTypes` | Array of Strings | No | | A list of URL schemes (http, ftp, and so on) supported by the app. |
 | `JVMMainClassName` | String | Yes (if the application is a classic classpath based application) | | The main class whose `main` method should be invoked when starting your application. |
 | `JVMMainModuleName` | String | Yes (if the application is a module based application) | | The main module that should be invoked when starting your application. |
 | `JVMVersion` | String | No | | The Java version your application needs to work. Can either be an explicit version String like `11.0.1`, a major version like `11` (signalizing that *any* Java 11 runtime is sufficient) or a value like `11+` (signalizing that *any* Java 11 *or higher* runtime is sufficient). |

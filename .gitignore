@@ -6,5 +6,6 @@
 /.vscode
 /target
 .DS_Store
+*.iml
 
 /tmp.app
