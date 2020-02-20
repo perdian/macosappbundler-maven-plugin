@@ -115,7 +115,7 @@ public class AppGenerator {
                 try (InputStream nativeExecutableStream = nativeExecutableSource.openStream()) {
                     FileUtils.copyInputStreamToFile(nativeExecutableStream, targetFile);
                 }
-                targetFile.setExecutable(true);
+                targetFile.setExecutable(true, false);
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot copy native executable", e);
