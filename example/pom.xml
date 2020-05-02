@@ -66,9 +66,6 @@
                 <configuration>
                     <plist>
                         <JVMMainClassName>de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainClassName>
-<!--
-                        <JVMRuntimePath>/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home</JVMRuntimePath>
--->
                         <JVMVersion>${java.version}</JVMVersion>
                         <JVMOptions>
                             <string>-Dapple.laf.useScreenMenuBar=true</string>
