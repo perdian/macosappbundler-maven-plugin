@@ -5,7 +5,7 @@ import javafx.application.Application;
 public class ExampleApplicationLauncher {
 
     public static void main(String[] args) {
-        Application.launch(ExampleApplication.class);
+        Application.launch(ExampleApplication.class, args);
     }
 
 }

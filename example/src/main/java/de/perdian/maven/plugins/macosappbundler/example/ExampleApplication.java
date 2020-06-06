@@ -9,7 +9,7 @@ public class ExampleApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Scene primaryScene = new Scene(new ExampleApplicationPane());
+        Scene primaryScene = new Scene(new ExampleApplicationPane(this.getParameters()));
         primaryScene.getStylesheets().add("META-INF/example.css");
 
         primaryStage.setTitle("Example application");
