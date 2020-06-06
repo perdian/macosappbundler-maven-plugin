@@ -19,6 +19,6 @@
 @interface JavaArgumentsComputer : NSObject {
 }
 
-+(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary;
++(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary commandLineArguments:(NSMutableArray*)commandLineArguments;
 
 @end

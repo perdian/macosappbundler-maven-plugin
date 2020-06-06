@@ -30,6 +30,9 @@ int exit_with_error(NSString *message, NSString *informativeText) {
     return 1;
 }
 
+static NSArray *javaArguments;
+static int javaArgumentsSupplied = 0;
+
 int main(int argc, char *argv[]) {
     @try {
 
@@ -56,8 +59,21 @@ int main(int argc, char *argv[]) {
             return exit_with_error(@"No 'Java' directory existing inside application bundle", [NSString stringWithFormat:@"Java directory expected at: %@", javaDataDirectory]);
         }
 
-        log_debug(@"Computing Java arguments from data directory: %@", javaDataDirectory);
-        NSArray *javaArguments = [JavaArgumentsComputer computeArguments:javaDataDirectory dictionary:applicationDictionary];
+        // For some reasons the main function is called multiple times. I didn't look too much into this but it seems to be
+        // related to multiple threads. (https://github.com/jitsi/jitsi/blob/master/src/native/macosx/launcher/launcher.m)
+        // However we're really only interested for the parameters that are computed the very first time so that's all we'll use.
+        if (javaArgumentsSupplied < 1) {
+            NSMutableArray *commandLineArguments = [NSMutableArray array];
+            for (int i = 1; i < argc; i++) {
+                NSString *commandLineArgument = [[NSString alloc] initWithCString:argv[i] encoding:NSUTF8StringEncoding];
+                [commandLineArguments addObject:commandLineArgument];
+            }
+            log_debug(@"Computing Java arguments from data directory: %@", javaDataDirectory);
+            javaArguments = [JavaArgumentsComputer computeArguments:javaDataDirectory dictionary:applicationDictionary commandLineArguments:commandLineArguments];
+            javaArgumentsSupplied++;
+            log_debug(@"Computed Java arguments: %@", javaArguments);
+        }
+
         return [JvmInvoker invoke:jvmDylib arguments:javaArguments];
 
     } @catch (NSException *exception) {

@@ -19,7 +19,7 @@
 
 @implementation JavaArgumentsComputer
 
-+(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary {
++(NSArray*)computeArguments:(NSString*)javaDirectory dictionary:(NSDictionary*)dictionary commandLineArguments:(NSMutableArray*)commandLineArguments {
     NSMutableArray *resultArray = [NSMutableArray new];
     [self appendCommonSystemArguments:resultArray dictionary:dictionary];
     NSString *modulesDirectory = [javaDirectory stringByAppendingPathComponent:@"modules"];
@@ -32,6 +32,7 @@
         @throw [NSException exceptionWithName:@"InvalidApplicationConfigurationException" reason:@"Invalid application configuration" userInfo:@{@"description": @"Neither a 'classpath' nor a 'modules' directory could be found inside the applications 'Java' folder."}];
     }
     [self appendCommonApplicationArguments:resultArray dictionary:dictionary];
+    [self appendCommandLineArguments:resultArray commandLineArguments:commandLineArguments];
     return resultArray;
 }
 
@@ -101,6 +102,14 @@
     NSArray* arguments = [dictionary valueForKey:@"JVMArguments"];
     if (arguments != nil && [arguments count] > 0) {
         for (id argument in arguments) {
+            [argumentsArray addObject:argument];
+        }
+    }
+}
+
++(void)appendCommandLineArguments:(NSMutableArray*)argumentsArray commandLineArguments:(NSMutableArray*)commandLineArguments {
+    if (commandLineArguments != nil && [commandLineArguments count] > 0) {
+        for (id argument in commandLineArguments) {
             [argumentsArray addObject:argument];
         }
     }

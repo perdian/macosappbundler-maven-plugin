@@ -19,7 +19,7 @@
 #import "jvm_invoker.h"
 #import "logger.h"
 
-typedef int (JNICALL *JLI_Launch_t)(int argc, char ** argv,
+typedef int (JNICALL *JLI_Launch_t)(int argc, char** argv,
                                     int jargc, const char** jargv,
                                     int appclassc, const char** appclassv,
                                     const char* fullversion,
