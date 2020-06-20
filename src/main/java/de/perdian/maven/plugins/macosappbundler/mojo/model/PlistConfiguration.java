@@ -84,6 +84,9 @@ public class PlistConfiguration {
     @Parameter
     public Boolean NSHighResolutionCapable = Boolean.TRUE;
 
+    @Parameter
+    public Boolean LSUIElement = null;
+
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -119,7 +122,8 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "JVMRuntimePath", this.JVMRuntimePath);
         this.appendKeyWithString(dictElement, document, "JVMVersion", this.JVMVersion);
         this.appendKeyWithString(dictElement, document, "JVMLogLevel", this.JVMLogLevel);
-        this.appendKeyWithString(dictElement, document, "NSHighResolutionCapable", this.NSHighResolutionCapable == null ? null : this.NSHighResolutionCapable.toString());
+        this.appendKeyWithBoolean(dictElement, document, "NSHighResolutionCapable", this.NSHighResolutionCapable);
+        this.appendKeyWithBoolean(dictElement, document, "LSUIElement", this.LSUIElement);
         for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
             this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
         }
@@ -141,20 +145,6 @@ public class PlistConfiguration {
         }
     }
 
-    private void appendCFBundleURLTypes(Element dictElement, Document document, List<String> value) {
-        if (value != null && !value.isEmpty()) {
-            Element keyElement = document.createElement("key");
-            keyElement.setTextContent("CFBundleURLTypes");
-            dictElement.appendChild(keyElement);
-            Element arrayElement = document.createElement("array");
-            Element arrayDictElement = document.createElement("dict");
-            appendKeyWithArrayOfStrings(arrayDictElement, document, "CFBundleURLSchemes", value);
-            arrayElement.appendChild(arrayDictElement);
-            dictElement.appendChild(arrayElement);
-        }
-
-    }
-
     private void appendKeyWithArrayOfStrings(Element dictElement, Document document, String key, List<String> value) {
         if (value != null && !value.isEmpty()) {
             Element keyElement = document.createElement("key");
@@ -168,6 +158,28 @@ public class PlistConfiguration {
                     arrayElement.appendChild(stringElement);
                 }
             }
+            dictElement.appendChild(arrayElement);
+        }
+    }
+
+    private void appendKeyWithBoolean(Element dictElement, Document document, String key, Boolean value) {
+        if (value != null) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent(key);
+            dictElement.appendChild(keyElement);
+            dictElement.appendChild(document.createElement(value.toString()));
+        }
+    }
+
+    private void appendCFBundleURLTypes(Element dictElement, Document document, List<String> value) {
+        if (value != null && !value.isEmpty()) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent("CFBundleURLTypes");
+            dictElement.appendChild(keyElement);
+            Element arrayElement = document.createElement("array");
+            Element arrayDictElement = document.createElement("dict");
+            this.appendKeyWithArrayOfStrings(arrayDictElement, document, "CFBundleURLSchemes", value);
+            arrayElement.appendChild(arrayDictElement);
             dictElement.appendChild(arrayElement);
         }
     }

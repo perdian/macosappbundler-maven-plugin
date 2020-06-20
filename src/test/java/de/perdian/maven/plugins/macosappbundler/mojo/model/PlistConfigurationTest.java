@@ -16,13 +16,15 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Test;
-
-import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 
 public class PlistConfigurationTest {
 
@@ -58,7 +60,7 @@ public class PlistConfigurationTest {
             "        <key>JVMMainModuleName</key>\n" +
             "        <string>com.test.bundle.module.main</string>\n" +
             "        <key>NSHighResolutionCapable</key>\n" +
-            "        <string>true</string>\n" +
+            "        <true/>\n" +
             "        <key>CFBundleIconFile</key>\n" +
             "        <string>test.icns</string>\n" +
             "    </dict>\n" +
