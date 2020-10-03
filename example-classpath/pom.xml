@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.perdian.maven.plugins</groupId>
-    <artifactId>macosappbundler-maven-plugin-example</artifactId>
+    <artifactId>macosappbundler-maven-plugin-example-classpath</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>macOS app bundler Maven plugin - Example application</name>

@@ -81,6 +81,54 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
  ...
 ```
 
+### Example with Java Module Path (Java 9+)
+
+```xml
+ ...
+    <plugin>
+        <groupId>de.perdian.maven.plugins</groupId>
+        <artifactId>macosappbundler-maven-plugin</artifactId>
+        <version>1.9.0</version>
+        <configuration>
+            <plist>
+                <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
+                <CFBundleDisplayName>My supercool application</CFBundleDisplayName>
+                <CFBundleDevelopmentRegion>English</CFBundleDevelopmentRegion>
+                <CFBundleURLTypes>
+                    <string>msa</string>
+                </CFBundleURLTypes>
+                <JVMMainModuleName>de.perdian.somemodule/de.perdian.test.YourApplication</JVMMainModuleName>
+                <JVMVersion>11+</JVMVersion>
+                <JVMOptions>
+                    <string>-Dfoo=bar</string>
+                    <string>-Dx=y</string>
+                </JVMOptions>
+                <JVMArguments>
+                    <string>-example</string>
+                    <string>${someProperty}</string>
+                </JVMArguments>
+            </plist>
+            <dmg>
+                <generate>true</generate>
+                <additionalResources>
+                    <additionalResource>
+                        <directory>src/bundle/macos/distribution</directory>
+                    </additionalResource>
+                </additionalResources>
+            </dmg>
+        </configuration>
+        <executions>
+            <execution>
+                <phase>package</phase>
+                <goals>
+                    <goal>bundle</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+ ...
+```
+
 ## Features
 
 After executing the goal during (e.g. during the `package` phase as shown in the example above) the macOS application bundle will be located in the `PROJECT_NAME.app` directory inside the `target` directory, where `PROJECT_NAME` equals the bundle name entered within the `CFBundleName` setting inside the `plist` configuration, or the name of the Maven project (`${project.name}`) if the value is not present inside the `plist` configuration.
