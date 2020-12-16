@@ -202,6 +202,25 @@ The following parameters can be set below the `jdk` configuration element:
 | `include` | Boolean | No | `false` | Whether or not to include the JDK in the application. |
 | `location` | String | No | | The location of the JDK to be included. If no location is provided then the *currently used JDK* will be added to the application, which is the JDK that is used by the Maven script executing the build. |
 
+### Native binary selection
+
+By default the launcher contains a [universal binary](https://en.wikipedia.org/wiki/Universal_binary#Universal_2) that allows running the application on both the classic x86_64 as well as the new arm64 architecture.
+
+In case any problems occur with the universal binary (or if you want to support only a specific architecture) you can select which binary should be bundled with your application via the `binaryType` flag:
+
+```xml
+ ...
+    <configuration>
+      <nativeBinary>X86_64</nativeBinary>
+    </configuration>
+ ...
+```
+
+The available values are:
+- `UNIVERSAL` (the default if no explicit value is given)
+- `X86_64`
+- `ARM_64`
+
 ## Development
 
 The project consists of two main parts: The regular *Maven plugin* (written in Java) and the *native macOS launcher* (written in Objective C).

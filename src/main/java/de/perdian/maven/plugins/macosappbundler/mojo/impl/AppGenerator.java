@@ -34,11 +34,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
+import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 
 public class AppGenerator {
 
     private PlistConfiguration plistConfiguration = null;
+    private NativeBinaryType nativeBinaryType = NativeBinaryType.UNIVERSAL;
     private boolean includeJdk = false;
     private String jdkLocation = null;
     private Log log = null;
@@ -105,20 +107,25 @@ public class AppGenerator {
 
     private void copyNativeExecutable(File targetDirectory) throws MojoExecutionException {
         try {
-            URL nativeExecutableSource = this.getClass().getClassLoader().getResource("JavaLauncher");
-            if (nativeExecutableSource == null) {
-                throw new MojoExecutionException("No native executable packaged in plugin");
-            } else {
-                String targetFileName = StringUtils.defaultIfEmpty(this.getPlistConfiguration().CFBundleExecutable, "JavaLauncher");
-                File targetFile = new File(targetDirectory, targetFileName);
-                this.getLog().info("Copy native executable to: " + targetFile.getAbsolutePath());
-                try (InputStream nativeExecutableStream = nativeExecutableSource.openStream()) {
-                    FileUtils.copyInputStreamToFile(nativeExecutableStream, targetFile);
-                }
-                targetFile.setExecutable(true, false);
+            URL nativeBinarySource = this.resolveNativeExecutable();
+            String targetFileName = StringUtils.defaultIfEmpty(this.getPlistConfiguration().CFBundleExecutable, "JavaLauncher");
+            File targetFile = new File(targetDirectory, targetFileName);
+            this.getLog().info("Copy native executable for binary type " + this.getNativeBinaryType() + " to: " + targetFile.getAbsolutePath());
+            try (InputStream nativeExecutableStream = nativeBinarySource.openStream()) {
+                FileUtils.copyInputStreamToFile(nativeExecutableStream, targetFile);
             }
+            targetFile.setExecutable(true, false);
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot copy native executable", e);
+        }
+    }
+
+    private URL resolveNativeExecutable() throws MojoExecutionException {
+        URL nativeBinarySource = this.getClass().getClassLoader().getResource(this.getNativeBinaryType().getFilename());
+        if (nativeBinarySource == null) {
+            throw new MojoExecutionException("No native executable packaged in plugin for native binary type " + this.getNativeBinaryType().name() + " found at location: " + this.getNativeBinaryType().getFilename());
+        } else {
+            return nativeBinarySource;
         }
     }
 
@@ -201,6 +208,13 @@ public class AppGenerator {
     }
     public void setIncludeJdk(boolean includeJdk) {
         this.includeJdk = includeJdk;
+    }
+
+    public NativeBinaryType getNativeBinaryType() {
+        return this.nativeBinaryType;
+    }
+    public void setNativeBinaryType(NativeBinaryType nativeBinaryType) {
+        this.nativeBinaryType = nativeBinaryType;
     }
 
     public String getJdkLocation() {

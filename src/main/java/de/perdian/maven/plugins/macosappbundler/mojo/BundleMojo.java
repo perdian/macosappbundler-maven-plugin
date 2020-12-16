@@ -35,6 +35,7 @@ import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.JdkConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 
 /**
@@ -55,6 +56,9 @@ public class BundleMojo extends AbstractMojo {
 
     @Parameter
     private JdkConfiguration jdk = new JdkConfiguration();
+
+    @Parameter
+    private NativeBinaryType nativeBinary = NativeBinaryType.UNIVERSAL;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -82,6 +86,7 @@ public class BundleMojo extends AbstractMojo {
             AppGenerator appGenerator = new AppGenerator(this.plist, this.getLog());
             appGenerator.setIncludeJdk(this.jdk.include);
             appGenerator.setJdkLocation(this.jdk.location);
+            appGenerator.setNativeBinaryType(this.nativeBinary);
             appGenerator.generateApp(this.project, appDirectory);
 
             if (this.dmg.generate) {
@@ -115,4 +120,5 @@ public class BundleMojo extends AbstractMojo {
     public void setProject(MavenProject project) {
         this.project = project;
     }
+
 }
