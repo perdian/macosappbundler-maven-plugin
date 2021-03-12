@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8
+      - image: circleci/openjdk:9
     steps:
       - checkout
       - restore_cache:
@@ -16,4 +16,4 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}      
+          key: v1-dependencies-{{ checksum "pom.xml" }}
