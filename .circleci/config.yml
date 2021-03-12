@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: cimg/openjdk:15
+      - image: cimg/openjdk:15.0
     steps:
       - checkout
       - restore_cache:
