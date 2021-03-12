@@ -40,10 +40,9 @@
     <properties>
 
         <file-management.version>3.0.0</file-management.version>
-        <junit.version>5.6.0</junit.version>
-        <maven.version>3.3.9</maven.version>
-        <maven.annotations.version>3.3</maven.annotations.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <junit.version>5.7.1</junit.version>
+        <maven.version>3.6.0</maven.version>
+        <maven.annotations.version>3.6.0</maven.annotations.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compile-native-executable.skip>false</maven.compile-native-executable.skip>
@@ -55,7 +54,7 @@
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
-                <version>1.6.0</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>compile-native-executable</id>
@@ -75,8 +74,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -176,7 +175,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -186,9 +185,25 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <source>8</source>
+                            <source>9</source>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-plugin-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <configuration>
+                            <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>mojo-descriptor</id>
+                                <goals>
+                                    <goal>descriptor</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                      </plugin>                    
                     <plugin>
                         <groupId>org.kohsuke</groupId>
                         <artifactId>pgp-maven-plugin</artifactId>
