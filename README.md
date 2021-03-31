@@ -237,6 +237,8 @@ Building the native part is fully integrated into the Maven lifecycle, so all yo
 
 - [**Christian Seifert**](http://www.perdian.de)
 
+[![Donate](https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P94BEUKLPMEFJ)
+
 See also the [list of contributors](https://github.com/perdian/macosappbundler-maven-plugin/contributors) who participated in this project.
 
 ## License
