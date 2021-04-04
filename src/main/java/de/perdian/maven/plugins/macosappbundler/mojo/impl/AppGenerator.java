@@ -178,8 +178,18 @@ public class AppGenerator {
                 if (!jdkDirectory.exists()) {
                     throw new MojoExecutionException("Specified JDK directory doesn't exist at: " + jdkDirectory.getAbsolutePath());
                 } else {
+
+                    // The JDK is located below the "Contents/Home" directory, so in case the location
+                    // is the parent directory (e.g. /Library/Java/JavaVirtualMachines//Library/Java/JavaVirtualMachines/adoptopenjdk-14.jdk
+                    // we can defer the actual JDK directory if a "Contents/Home" subdirectory is existing
+                    File contentsHomeDirectory = new File(jdkDirectory, "Contents/Home/");
+                    if (contentsHomeDirectory.exists() && contentsHomeDirectory.isDirectory()) {
+                        jdkDirectory = contentsHomeDirectory;
+                    }
+
                     this.getLog().info("Copy JDK from explicit directory at: " + jdkDirectory.getAbsolutePath());
                     this.copyJdkFromDirectory(targetDirectory, jdkDirectory);
+
                 }
             }
         }
