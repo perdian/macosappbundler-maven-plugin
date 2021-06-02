@@ -20,6 +20,7 @@ package de.perdian.maven.plugins.macosappbundler.mojo;
 import java.io.File;
 import java.io.IOException;
 
+import de.perdian.maven.plugins.macosappbundler.mojo.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -33,10 +34,6 @@ import org.apache.maven.project.MavenProject;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.JdkConfiguration;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 
 /**
  * Create all artifacts to publish a Java application as macOS application bundle.
@@ -50,6 +47,9 @@ public class BundleMojo extends AbstractMojo {
 
     @Parameter(required = true)
     private PlistConfiguration plist = null;
+
+    @Parameter
+    private AppConfiguration app = new AppConfiguration();
 
     @Parameter
     private DmgConfiguration dmg = new DmgConfiguration();
@@ -83,7 +83,7 @@ public class BundleMojo extends AbstractMojo {
                 this.getLog().info("Creating app directory at: " + appDirectory.getAbsolutePath());
                 appDirectory.mkdirs();
             }
-            AppGenerator appGenerator = new AppGenerator(this.plist, this.getLog());
+            AppGenerator appGenerator = new AppGenerator(this.plist, this.app, this.getLog());
             appGenerator.setIncludeJdk(this.jdk.include);
             appGenerator.setJdkLocation(this.jdk.location);
             appGenerator.setNativeBinaryType(this.nativeBinary);

@@ -22,8 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,8 @@ import org.apache.maven.project.MavenProject;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
+import org.apache.maven.shared.model.fileset.FileSet;
+import org.apache.maven.shared.model.fileset.util.FileSetManager;
 
 public class AppGenerator {
 
@@ -44,10 +48,19 @@ public class AppGenerator {
     private boolean includeJdk = false;
     private String jdkLocation = null;
     private Log log = null;
+    private AppConfiguration appConfiguration = null;
 
-    public AppGenerator(PlistConfiguration plistConfiguration, Log log) {
+    public AppGenerator(PlistConfiguration plistConfiguration, AppConfiguration appConfiguration, Log log) {
         this.setPlistConfiguration(plistConfiguration);
+        this.setAppConfiguration(appConfiguration);
         this.setLog(log);
+    }
+
+    private AppConfiguration getAppConfiguration() {
+        return this.appConfiguration;
+    }
+    private void setAppConfiguration(AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
     }
 
     public void generateApp(MavenProject project, File appDirectory) throws MojoExecutionException {
@@ -55,6 +68,38 @@ public class AppGenerator {
         this.copyJdk(new File(appDirectory, "Contents/Java/jdk"));
         this.copyNativeExecutable(new File(appDirectory, "Contents/MacOS"));
         this.generatePlist(project, new File(appDirectory, "Contents/"));
+
+        if (this.getAppConfiguration().additionalResources != null && !this.getAppConfiguration().additionalResources.isEmpty()) {
+            this.getLog().info("Copy additional app resources");
+            this.copyAdditionalAppResources(project, this.getAppConfiguration().additionalResources, appDirectory);
+        }
+    }
+
+    private void copyAdditionalAppResources(MavenProject project, List<FileSet> additionalResources, File appDirectory) throws MojoExecutionException {
+        try {
+            FileSetManager fileSetManager = new FileSetManager();
+            for (FileSet fileSet : additionalResources) {
+                File fileSetDirectory = new File(fileSet.getDirectory());
+                Map<String, String> mappedFiles = fileSetManager.mapIncludedFiles(fileSet);
+                if (!fileSetDirectory.isAbsolute()) {
+                    fileSetDirectory = new File(appDirectory, fileSet.getDirectory());
+                }
+
+                File outputDirectory = new File(fileSet.getOutputDirectory());
+                if (!outputDirectory.isAbsolute()) {
+                    outputDirectory = new File(appDirectory, fileSet.getOutputDirectory());
+                }
+
+                for (Map.Entry<String, String> mappedFile : mappedFiles.entrySet()){
+                    File sourceFile = new File(fileSetDirectory, mappedFile.getKey());
+                    File targetFile = new File(outputDirectory, mappedFile.getKey());
+                    FileUtils.copyFile(sourceFile, targetFile);
+                }
+            }
+        } catch (Exception e) {
+            this.getLog().error("Cannot copy additional app resources", e);
+            throw new MojoExecutionException("Cannot copy additional app resources", e);
+        }
     }
 
     private void copyApplicationDependencies(MavenProject project, File appJavaDirectory) throws MojoExecutionException {

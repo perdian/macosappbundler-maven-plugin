@@ -62,7 +62,7 @@
             <plugin>
                 <groupId>de.perdian.maven.plugins</groupId>
                 <artifactId>macosappbundler-maven-plugin</artifactId>
-                <version>1.10.0</version>
+                <version>1.10.3-SNAPSHOT</version>
                 <configuration>
                     <plist>
                         <JVMMainClassName>de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainClassName>
@@ -72,6 +72,17 @@
                             <string>-Xdock:name=${project.name}</string>
                         </JVMOptions>
                     </plist>
+                    <app>
+                        <additionalResources>
+                            <resource>
+                                <directory>${project.basedir}/src/main/resources</directory>
+                                <outputDirectory>Contents/Resources</outputDirectory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                            </resource>
+                        </additionalResources>
+                    </app>
                 </configuration>
                 <executions>
                     <execution>

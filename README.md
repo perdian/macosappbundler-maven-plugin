@@ -137,7 +137,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
 
 After executing the goal during (e.g. during the `package` phase as shown in the example above) the macOS application bundle will be located in the `PROJECT_NAME.app` directory inside the `target` directory, where `PROJECT_NAME` equals the bundle name entered within the `CFBundleName` setting inside the `plist` configuration, or the name of the Maven project (`${project.name}`) if the value is not present inside the `plist` configuration.
 
-The plugin will detect whether or not the project is a Java module by checking if the `plist` property `JVMMainModuleName` is present. If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be used.
+The plugin will detect whether the project is a Java module by checking if the `plist` property `JVMMainModuleName` is present. If that's the case the launcher will use the *modulepath*. Otherwise the regular *classpath* will be used.
 
 ## Configuration
 
@@ -181,9 +181,36 @@ The following other properties can be added to the `dmg` element configuring the
 | `appendVersion` | Boolean | No | `true` | If `true`, append the version to the `.dmg` name
 | `dmgFileName` | String | No | `null` | If not `null` and not empty, the supplied string will be used as the name (`.dmg` will be appended).
 
+### APP configuration
+
+The following other properties can be added to the `app` element configuring additional files to be included in the app bundle:
+
+| Key | Type | Required? | Default | Description |
+| --- | ---- | --------- | ------- | ----------- |
+| `additionalResources` | List<Fileset> | No | | Additional files to be copied into the app bundle. |
+
+
+```xml
+ ...
+    <configuration>
+        <app>
+            <additionalResources>
+                <resource>
+                    <directory>${project.basedir}/src/main/resources</directory>
+                    <outputDirectory>Contents/Resources</outputDirectory>
+                    <includes>
+                        <include>**</include>
+                    </includes>
+                </resource>
+            </additionalResources>
+        </app>
+    </configuration>
+ ...
+```
+
 ### JDK inclusion
 
-Ususlly the application bundle built by the plugin will depend upon a Java runtime being available on the machine where the application is executed. To be completely self-sustaining, the plugin supports including the runtime into the target application. That runtime will then be used to launch the application, so there are not dependencies to a JDK being installed locally.
+Usually the application bundle built by the plugin will depend upon a Java runtime being available on the machine where the application is executed. To be completely self-sustaining, the plugin supports including the runtime into the target application. That runtime will then be used to launch the application, so there are not dependencies to a JDK being installed locally.
 
 ```xml
  ...
