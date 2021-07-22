@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,11 +34,12 @@ import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.model.fileset.FileSet;
 
+import de.perdian.maven.plugins.macosappbundler.mojo.impl.support.IO;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
-import org.apache.maven.shared.model.fileset.FileSet;
-import org.apache.maven.shared.model.fileset.util.FileSetManager;
 
 public class AppGenerator {
 
@@ -77,25 +77,7 @@ public class AppGenerator {
 
     private void copyAdditionalAppResources(MavenProject project, List<FileSet> additionalResources, File appDirectory) throws MojoExecutionException {
         try {
-            FileSetManager fileSetManager = new FileSetManager();
-            for (FileSet fileSet : additionalResources) {
-                File fileSetDirectory = new File(fileSet.getDirectory());
-                Map<String, String> mappedFiles = fileSetManager.mapIncludedFiles(fileSet);
-                if (!fileSetDirectory.isAbsolute()) {
-                    fileSetDirectory = new File(appDirectory, fileSet.getDirectory());
-                }
-
-                File outputDirectory = new File(fileSet.getOutputDirectory());
-                if (!outputDirectory.isAbsolute()) {
-                    outputDirectory = new File(appDirectory, fileSet.getOutputDirectory());
-                }
-
-                for (Map.Entry<String, String> mappedFile : mappedFiles.entrySet()){
-                    File sourceFile = new File(fileSetDirectory, mappedFile.getKey());
-                    File targetFile = new File(outputDirectory, mappedFile.getKey());
-                    FileUtils.copyFile(sourceFile, targetFile);
-                }
-            }
+            IO.copyFileSets(appDirectory, additionalResources);
         } catch (Exception e) {
             this.getLog().error("Cannot copy additional app resources", e);
             throw new MojoExecutionException("Cannot copy additional app resources", e);

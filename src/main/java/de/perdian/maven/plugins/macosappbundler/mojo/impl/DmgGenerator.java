@@ -24,16 +24,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.model.fileset.FileSet;
-import org.apache.maven.shared.model.fileset.util.FileSetManager;
 import org.apache.maven.shared.utils.cli.Commandline;
 
+import de.perdian.maven.plugins.macosappbundler.mojo.impl.support.IO;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
 
 public class DmgGenerator {
@@ -49,7 +47,6 @@ public class DmgGenerator {
     }
 
     public void generateDmg(MavenProject project, File appDirectory, File bundleDirectory, File dmgFile) throws MojoExecutionException {
-
         try {
             File bundleAppDirectory = new File(bundleDirectory, appDirectory.getName());
             if (!bundleAppDirectory.exists()) {
@@ -141,19 +138,7 @@ public class DmgGenerator {
 
     private void copyAdditionalDmgResources(MavenProject project, List<FileSet> additionalResources, File bundleDirectory) throws MojoExecutionException {
         try {
-            FileSetManager fileSetManager = new FileSetManager();
-            for (FileSet fileSet : additionalResources) {
-                File fileSetDirectory = new File(fileSet.getDirectory());
-                Map<String, String> mappedFiles = fileSetManager.mapIncludedFiles(fileSet);
-                if (!fileSetDirectory.isAbsolute()) {
-                    fileSetDirectory = new File(project.getBasedir(), fileSet.getDirectory());
-                }
-                for (Map.Entry<String, String> mappedFile : mappedFiles.entrySet()) {
-                    File sourceFile = new File(fileSetDirectory, mappedFile.getKey());
-                    File targetFile = new File(bundleDirectory, mappedFile.getKey());
-                    FileUtils.copyFile(sourceFile, targetFile);
-                }
-            }
+            IO.copyFileSets(bundleDirectory, additionalResources);
         } catch (Exception e) {
             this.getLog().error("Cannot copy additional resources", e);
             throw new MojoExecutionException("Cannot copy additional resources", e);
