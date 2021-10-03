@@ -87,6 +87,9 @@ public class PlistConfiguration {
     @Parameter
     public Boolean LSUIElement = null;
 
+    @Parameter
+    public Boolean NSSupportsAutomaticGraphicsSwitching = Boolean.TRUE;
+
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -124,6 +127,7 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "JVMLogLevel", this.JVMLogLevel);
         this.appendKeyWithBoolean(dictElement, document, "NSHighResolutionCapable", this.NSHighResolutionCapable);
         this.appendKeyWithBoolean(dictElement, document, "LSUIElement", this.LSUIElement);
+        this.appendKeyWithBoolean(dictElement, document, "NSSupportsAutomaticGraphicsSwitching", this.NSSupportsAutomaticGraphicsSwitching);
         for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
             this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
         }
