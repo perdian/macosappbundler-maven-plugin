@@ -61,6 +61,9 @@ public class PlistConfiguration {
     public String CFBundleDevelopmentRegion = null;
 
     @Parameter
+    public String CFBundlePackageType = null;
+
+    @Parameter
     public String JVMVersion = null;
 
     @Parameter
@@ -117,6 +120,7 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
         this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
         this.appendKeyWithString(dictElement, document, "CFBundleDevelopmentRegion", this.CFBundleDevelopmentRegion);
+        this.appendKeyWithString(dictElement, document, "CFBundlePackageType", this.CFBundlePackageType);
         this.appendCFBundleURLTypes(dictElement, document, this.CFBundleURLTypes);
         this.appendKeyWithArrayOfStrings(dictElement, document, "JVMArguments", this.JVMArguments);
         this.appendKeyWithString(dictElement, document, "JVMMainClassName", this.JVMMainClassName);

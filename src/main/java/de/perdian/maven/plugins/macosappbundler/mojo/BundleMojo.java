@@ -75,6 +75,7 @@ public class BundleMojo extends AbstractMojo {
             this.plist.CFBundleIdentifier = StringUtils.defaultIfEmpty(this.plist.CFBundleIdentifier, this.project.getGroupId() + "." + this.project.getArtifactId());
             this.plist.CFBundleShortVersionString = StringUtils.defaultIfEmpty(this.plist.CFBundleShortVersionString, this.project.getVersion());
             this.plist.CFBundleExecutable = StringUtils.defaultIfEmpty(this.plist.CFBundleExecutable, "JavaLauncher");
+            this.plist.CFBundlePackageType = StringUtils.defaultIfEmpty(this.plist.CFBundlePackageType, "APPL");
 
             String appName = StringUtils.defaultString(this.plist.CFBundleName, this.project.getBuild().getFinalName());
             File targetDirectory = new File(this.project.getBuild().getDirectory());
