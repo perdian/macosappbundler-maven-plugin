@@ -92,7 +92,13 @@ public class PlistConfiguration {
 
     @Parameter
     public Boolean NSSupportsAutomaticGraphicsSwitching = Boolean.TRUE;
-
+    
+    @Parameter
+    public String NSMicrophoneUsageDescription = null;
+    
+    @Parameter
+    public String NSCameraUsageDescription = null;
+    
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -132,6 +138,8 @@ public class PlistConfiguration {
         this.appendKeyWithBoolean(dictElement, document, "NSHighResolutionCapable", this.NSHighResolutionCapable);
         this.appendKeyWithBoolean(dictElement, document, "LSUIElement", this.LSUIElement);
         this.appendKeyWithBoolean(dictElement, document, "NSSupportsAutomaticGraphicsSwitching", this.NSSupportsAutomaticGraphicsSwitching);
+        this.appendKeyWithString(dictElement, document, "NSMicrophoneUsageDescription", this.NSMicrophoneUsageDescription);
+        this.appendKeyWithString(dictElement, document, "NSCameraUsageDescription", this.NSCameraUsageDescription);
         for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
             this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
         }
