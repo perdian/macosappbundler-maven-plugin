@@ -254,6 +254,8 @@ The available values are:
 
 ## Development
 
+Changes are documented in the [`CHANGELOG.md`](CHANGELOG.md) file.
+
 The project consists of two main parts: The regular *Maven plugin* (written in Java) and the *native macOS launcher* (written in Objective C).
 
 Building the native part is fully integrated into the Maven lifecycle, so all you need to do to build the plugin is:
