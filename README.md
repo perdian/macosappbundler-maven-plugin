@@ -170,6 +170,8 @@ The following values can be configured:
 | `NSSupportsAutomaticGraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching) |
 | `NSMicrophoneUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device’s microphone. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nsmicrophoneusagedescription) |
 | `NSCameraUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device’s camera. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) |
+| `NSHumanReadableCopyright` | String | No | | A human-readable copyright notice for the bundle. [Details:](https://developer.apple.com/documentation/bundleresources/information_property_list/nshumanreadablecopyright/) |
+| `NSAppSleepDisabled` | Boolean | No | | Declares if the app is allowed to nap or not. |
 ### DMG configuration
 
 The following other properties can be added to the `dmg` element configuring the generation of the DMG file at the end of the build:
