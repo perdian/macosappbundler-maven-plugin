@@ -62,8 +62,9 @@
             <plugin>
                 <groupId>de.perdian.maven.plugins</groupId>
                 <artifactId>macosappbundler-maven-plugin</artifactId>
-                <version>1.14.0</version>
+                <version>1.16.1-SNAPSHOT</version>
                 <configuration>
+<f>dssdfsfs</f>
                     <plist>
                         <JVMMainClassName>de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainClassName>
                         <JVMVersion>${java.version}</JVMVersion>
