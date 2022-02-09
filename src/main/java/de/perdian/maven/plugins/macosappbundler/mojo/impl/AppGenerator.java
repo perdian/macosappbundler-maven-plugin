@@ -64,7 +64,7 @@ public class AppGenerator {
     }
 
     public void generateApp(MavenProject project, File appDirectory) throws MojoExecutionException {
-        this.copyApplicationDependencies(project, new File(appDirectory, "Contents/Java"));
+        this.copyApplicationClasses(project, new File(appDirectory, "Contents/Java"));
         this.copyJdk(new File(appDirectory, "Contents/Java/jdk"));
         this.copyNativeExecutable(new File(appDirectory, "Contents/MacOS"));
         this.generatePlist(project, new File(appDirectory, "Contents/"));
@@ -84,24 +84,28 @@ public class AppGenerator {
         }
     }
 
-    private void copyApplicationDependencies(MavenProject project, File appJavaDirectory) throws MojoExecutionException {
-        this.getLog().info("Copy application dependencies to: " + appJavaDirectory.getAbsolutePath());
+    private void copyApplicationClasses(MavenProject project, File appJavaDirectory) throws MojoExecutionException {
+        this.getLog().info("Copy application classes to: " + appJavaDirectory.getAbsolutePath());
         try {
             if (StringUtils.isNotEmpty(this.getPlistConfiguration().JVMMainClassName)) {
-                this.copyClasspathApplicationDependencies(project, new File(appJavaDirectory, "classpath"));
+                this.copyClasspathApplicationClasses(project, new File(appJavaDirectory, "classpath"));
             } else if (StringUtils.isNotEmpty(this.getPlistConfiguration().JVMMainModuleName)) {
-                this.copyModuleApplicationDependencies(project, new File(appJavaDirectory, "modules"));
+                this.copyModulesApplicationClasses(project, new File(appJavaDirectory, "modules"));
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot copy dependencies", e);
         }
     }
 
-    private void copyClasspathApplicationDependencies(MavenProject project, File classpathDirectory) throws IOException {
+    private void copyClasspathApplicationClasses(MavenProject project, File classpathDirectory) throws IOException {
         ArtifactRepositoryLayout repositoryLayout = new DefaultRepositoryLayout();
         this.copyClasspathApplicationDependencyArtifact(project.getArtifact(), classpathDirectory, repositoryLayout);
-        for (Artifact artifact : project.getArtifacts()) {
-            this.copyClasspathApplicationDependencyArtifact(artifact, classpathDirectory, repositoryLayout);
+        if (this.getAppConfiguration().isIncludeDependencies()) {
+            for (Artifact artifact : project.getArtifacts()) {
+                this.copyClasspathApplicationDependencyArtifact(artifact, classpathDirectory, repositoryLayout);
+            }
+        } else {
+            this.getLog().debug("Inclusion of dependencies has been disbaled");
         }
     }
 
@@ -113,14 +117,18 @@ public class AppGenerator {
         FileUtils.copyFile(artifact.getFile(), targetFile);
     }
 
-    private void copyModuleApplicationDependencies(MavenProject project, File modulesDirectory) throws IOException {
-        this.copyModuleApplicationDependencyArtifact(project.getArtifact(), modulesDirectory);
-        for (Artifact artifact : project.getArtifacts()) {
-            this.copyModuleApplicationDependencyArtifact(artifact, modulesDirectory);
+    private void copyModulesApplicationClasses(MavenProject project, File modulesDirectory) throws IOException {
+        this.copyModulesApplicationClassesArtifact(project.getArtifact(), modulesDirectory);
+        if (this.getAppConfiguration().isIncludeDependencies()) {
+            for (Artifact artifact : project.getArtifacts()) {
+                this.copyModulesApplicationClassesArtifact(artifact, modulesDirectory);
+            }
+        } else {
+            this.getLog().debug("Inclusion of dependencies has been disbaled");
         }
     }
 
-    private void copyModuleApplicationDependencyArtifact(Artifact artifact, File modulesDirectory) throws IOException {
+    private void copyModulesApplicationClassesArtifact(Artifact artifact, File modulesDirectory) throws IOException {
         StringBuilder targetFileName = new StringBuilder();
         targetFileName.append(artifact.getArtifactId());
         targetFileName.append("-").append(artifact.getVersion());

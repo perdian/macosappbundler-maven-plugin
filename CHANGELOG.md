@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.16.0...HEAD)
 
+### Added
+
+- Allow exclusion of dependencies when creating the application bundle.
 
 ## [1.16.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.15.0...v1.16.0) - 2022-01-23
 

@@ -235,6 +235,22 @@ The following parameters can be set below the `jdk` configuration element:
 | `include` | Boolean | No | `false` | Whether or not to include the JDK in the generated application bundle. |
 | `location` | String | No | | The location of the JDK to be included. If no location is provided then the *currently used JDK* (which is the JDK that is used by the Maven binary) will be added to the application. |
 
+### Dependencies exclusion
+
+By default all dependencies (both direct dependencies as well as transient dependencies) are included in the generated application bundle.
+
+If you only want to include the direct application JAR file without any dependencies (e.g. because you've already included the dependencies into the application JAR itself) the you can set the `includeDependencies` flag of the `app` configuration to `false`:
+
+```xml
+ ...
+    <configuration>
+        <app>
+            <includeDependencies>false</includeDependencies>
+        </app>
+    </configuration>
+ ...
+```
+
 ### Native binary selection
 
 By default the launcher contains a [universal binary](https://en.wikipedia.org/wiki/Universal_binary#Universal_2) that allows running the application on both the classic x86_64 as well as the new arm64 architecture.
@@ -244,7 +260,7 @@ In case any problems occur with the universal binary (or if you want to support 
 ```xml
  ...
     <configuration>
-      <nativeBinary>X86_64</nativeBinary>
+        <nativeBinary>X86_64</nativeBinary>
     </configuration>
  ...
 ```

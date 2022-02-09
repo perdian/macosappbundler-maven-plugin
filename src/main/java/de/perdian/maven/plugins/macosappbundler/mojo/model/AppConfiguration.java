@@ -16,12 +16,25 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
+import java.util.List;
+
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.model.fileset.FileSet;
 
-import java.util.List;
-
 public class AppConfiguration {
+
     @Parameter
     public List<FileSet> additionalResources = null;
+
+    @Parameter
+    public boolean includeDependencies = true;
+
+    public boolean isIncludeDependencies() {
+        return this.includeDependencies;
+    }
+    public void setIncludeDependencies(boolean includeDependencies) {
+        this.includeDependencies = includeDependencies;
+    }
+
+
 }
