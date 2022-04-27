@@ -65,7 +65,7 @@ public class AppGenerator {
 
     public void generateApp(MavenProject project, File appDirectory) throws MojoExecutionException {
         this.copyApplicationClasses(project, new File(appDirectory, "Contents/Java"));
-        this.copyJdk(new File(appDirectory, "Contents/Java/Runtime.jre"));
+        this.copyJdk(new File(appDirectory, "Contents/Java/runtime"));
         this.copyNativeExecutable(new File(appDirectory, "Contents/MacOS"));
         this.generatePlist(project, new File(appDirectory, "Contents/"));
 

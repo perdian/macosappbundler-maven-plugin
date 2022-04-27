@@ -73,7 +73,7 @@
     }
     NSBundle *applicationBundle = [NSBundle mainBundle];
     NSString *applicationDirectory = [applicationBundle bundlePath];
-    NSString *jdkDataDirectory = [applicationDirectory stringByAppendingPathComponent:@"Contents/Java/Runtime.jre"];
+    NSString *jdkDataDirectory = [applicationDirectory stringByAppendingPathComponent:@"Contents/Java/runtime"];
     if ([[NSFileManager defaultManager] fileExistsAtPath:jdkDataDirectory isDirectory:NULL]) {
         log_info(@"Using internally provided JDK at: %@", jdkDataDirectory);
         return jdkDataDirectory;
