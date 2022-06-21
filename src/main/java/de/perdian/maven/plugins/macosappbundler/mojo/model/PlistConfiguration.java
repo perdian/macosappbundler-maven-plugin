@@ -55,6 +55,9 @@ public class PlistConfiguration {
     public String CFBundleExecutable = null;
 
     @Parameter
+    public List<String> CFBundleTypeExtensions = null;
+
+    @Parameter
     public List<String> CFBundleURLTypes = null;
 
     @Parameter
@@ -101,7 +104,7 @@ public class PlistConfiguration {
 
     @Parameter
     public String NSHumanReadableCopyright = null;
-    
+
     @Parameter
     public Boolean NSAppSleepDisabled = null;
 
@@ -131,6 +134,7 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "CFBundleIdentifier", this.CFBundleIdentifier);
         this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
         this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
+        this.appendKeyWithArrayOfStrings(dictElement, document, "CFBundleTypeExtensions", this.CFBundleTypeExtensions);
         this.appendKeyWithString(dictElement, document, "CFBundleDevelopmentRegion", this.CFBundleDevelopmentRegion);
         this.appendKeyWithString(dictElement, document, "CFBundlePackageType", this.CFBundlePackageType);
         this.appendCFBundleURLTypes(dictElement, document, this.CFBundleURLTypes);
