@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.17.1...HEAD)
+## [1.18.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.17.1...v1.18.0) - 2022-06-21
+
+### Added
+
+- Support `CFBundleTypeExtensions` configuration property.
+
 
 ## [1.17.1](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.17.0...v1.17.1) - 2022-04-27
 
@@ -12,11 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Embedded JDK or JRE is now stored inside the bundle in the `Contents/Java/runtime` directory (https://github.com/perdian/macosappbundler-maven-plugin/pull/36)
 
+
 ## [1.17.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.16.0...v1.17.0) - 2022-01-23
 
 ### Added
 
 - Allow exclusion of dependencies when creating the application bundle.
+
 
 ## [1.16.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.15.0...v1.16.0) - 2022-01-23
 
