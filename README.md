@@ -1,6 +1,6 @@
 # macOS app bundler Maven plugin
 
-Maven plugin for creating a native [macOS bundle](https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW19) containing all dependencies required by a Maven project.
+Maven plugin for creating a native [macOS bundle](https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW19) containing all dependencies declared by a Maven project.
 
 [![Maven Central](https://img.shields.io/maven-central/v/de.perdian.maven.plugins/macosappbundler-maven-plugin.svg)](https://mvnrepository.com/artifact/de.perdian.maven.plugins/macosappbundler-maven-plugin)
 [![License](http://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
@@ -15,7 +15,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
 ### Minimum example
 
 ```xml
- ...
+...
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
@@ -34,13 +34,13 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
             </execution>
         </executions>
     </plugin>
- ...
+...
 ```
 
 ### Extended example
 
 ```xml
- ...
+...
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
@@ -82,13 +82,13 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
             </execution>
         </executions>
     </plugin>
- ...
+...
 ```
 
 ### Example with Java Module Path
 
 ```xml
- ...
+...
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
@@ -130,7 +130,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
             </execution>
         </executions>
     </plugin>
- ...
+...
 ```
 
 ## Features
@@ -143,49 +143,50 @@ The plugin will detect whether the project is a Java module by checking if the `
 
 ### Property list Configuration
 
-The values within the `plist` element are directly transferred to the `Info.plist` file within the application bundle. To keep the usage within the code consistent they use the same keys within the `pom.xml` configuration as they do within the `Info.plist`.
+The values within the `plist` element are directly transferred to the [`Info.plist`](https://developer.apple.com/documentation/bundleresources/information_property_list) file within the application bundle. To keep the usage within the code consistent they use the same keys within the `pom.xml` configuration as they do within the `Info.plist`.
 
 The following values can be configured:
 
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
-| `CFBundleIconFile` | File | No | | The `icns` file that should be used as main icon for the application. The location must be entered relatively to the root of the project in which the plugin is used. |
-| `CFBundleIdentifier` | String | No | `${groupId}.${artifactId}` | The macOS identifier of your application bundle. |
-| `CFBundleDisplayName` | String | No | `${project.name}` | The published name of your application. |
-| `CFBundleName` | String | No | `${project.name}` | The internal name of your application. |
-| `CFBundleShortVersionString` | String | No | `${version}` | The version of your application. |
-| `CFBundleExecutable` | String | No | `JavaLauncher` | The name of the executable within the application bundle. No regular user will ever see this but you may want to change it for debugging purposes when analyzing your application. |
 | `CFBundleDevelopmentRegion` | String | No | `English` | The default language and region for the bundle, as a [language ID](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html). |
-| `CFBundleURLTypes` | Array of Strings | No | | A list of URL schemes (`http`, `ftp`, etc.) supported by the app. |
-| `CFBundlePackageType` | String | No | `APPL` | This key consists of a four-letter code for the bundle type. For apps, the code is APPL, for frameworks, it's FMWK, and for bundles, it's BNDL. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundlepackagetype) |
-| `CFBundleTypeExtensions` | Array of Strings | No |  | File extensions this application can handle [Details](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html) |
+| `CFBundleDisplayName` | String | No | `${project.name}` | The published name of your application. |
+| `CFBundleExecutable` | String | No | `JavaLauncher` | The name of the executable within the application bundle. No regular user will ever see this but you may want to change it for debugging purposes when analyzing your application. |
+| `CFBundleIconFile` | File | No | | The `icns` file that should be used as main icon for the application. The location must be entered relatively to the root of the project in which the plugin is used. |
+| `CFBundleIdentifier` | String | No | `${groupId}.${artifactId}` | The [macOS bundle identifier](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier) of your application. |
+| `CFBundleName` | String | No | `${project.name}` | The internal name of your application. |
+| `CFBundlePackageType` | String | No | `APPL` | A four-letter code specifying the bundle type. For apps, the code is `APPL`, for frameworks, it' `FMWK`, and for bundles, it's `BNDL` ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundlepackagetype)) |
+| `CFBundleShortVersionString` | String | No | `${version}` | The version of your application. |
+| `CFBundleTypeExtensions` | Array of Strings | No |  | A list of file extensions this application can handle ([Details](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html)). |
+| `CFBundleURLTypes` | Array of Strings | No | | A list of URL schemes (`http`, `ftp`, etc.) supported by the application. |
+| `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the Java runtime. |
+| `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
 | `JVMMainClassName` | String | Yes (if the application is a classic classpath based application) | | The main class whose `main` method should be invoked when starting your application. |
 | `JVMMainModuleName` | String | Yes (if the application is a module based application) | | The main module that should be invoked when starting your application. |
+| `JVMOptions` | Array of Strings | No | | Additional parameters (`-D` parameters) to be passed to the Java runtime. |
+| `JVMRuntimePath` | String | No | | The exact location of the Java runtime. |
 | `JVMVersion` | String | No | | The Java version your application needs to work. Can either be an explicit version String like `11.0.1`, a major version like `11` (signalizing that *any* Java 11 runtime is sufficient) or a value like `11+` (signalizing that *any* Java 11 *or higher* runtime is sufficient). |
-| `JVMOptions` | Array of Strings | No | | Additional parameters (`-D` parameters) to be passed to the runtime. |
-| `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the runtime. |
-| `JVMRuntimePath` | String | No | | The exact location of the JVM. |
-| `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
-| `NSHighResolutionCapable` | Boolean | No | `true` | Declares if the application supports rendering in HiDPI (Retina). [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshighresolutioncapable) |
-| `LSUIElement` | Boolean | No | | Declares if the app is an agent app that runs in the background and doesn't appear in the Dock. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/lsuielement) |
-| `NSSupportsAutomaticGraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching) |
-| `NSMicrophoneUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device’s microphone. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nsmicrophoneusagedescription) |
-| `NSCameraUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device’s camera. [Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) |
-| `NSHumanReadableCopyright` | String | No | | A human-readable copyright notice for the bundle. [Details:](https://developer.apple.com/documentation/bundleresources/information_property_list/nshumanreadablecopyright/) |
+| `LSUIElement` | Boolean | No | | Declares if the application is an agent app that runs in the background and doesn't appear in the Dock ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/lsuielement)). |
 | `NSAppSleepDisabled` | Boolean | No | | Declares if the app is allowed to nap or not. |
+| `NSCameraUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device's camera ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription)). |
+| `NSHighResolutionCapable` | Boolean | No | `true` | Declares if the application supports rendering in HiDPI (Retina) ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshighresolutioncapable)). |
+| `NSHumanReadableCopyright` | String | No | | A human-readable copyright notice for the bundle ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshumanreadablecopyright/)). |
+| `NSMicrophoneUsageDescription` | String | No | | A message that tells the user why the application is requesting access to the device's microphone ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nsmicrophoneusagedescription)). |
+| `NSSupportsAutomaticGraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching)). |
+
 ### DMG configuration
 
-The following other properties can be added to the `dmg` element configuring the generation of the DMG file at the end of the build:
+The following other properties can be added to the `dmg` element configuring the generation of the [DMG file](https://www.howtogeek.com/362166/what-is-a-dmg-file-and-how-do-i-use-one/) at the end of the build:
 
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
 | `generate` | Boolean | No | `false` | Whether or not to create a `DMG` archive. |
-| `additionalResources` | List<Fileset> | No | | Additional files to be copied into the archive. |
+| `additionalResources` | List<Fileset> | No | | List of additional files to be copied into the archive. |
 | `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 | `useGenIsoImage` | Boolean | No | `false` | Whether or not to use `genisoimage` to create the archive. Default is `hdiutil`. |
 | `autoFallback` | Boolean | No | `false` | If `true`, try the other archive generation method when the first one fails. (e.g. run `hdiutil` when `genisoimage` fails and vice-versa) |
-| `appendVersion` | Boolean | No | `true` | If `true`, append the version to the `.dmg` name
-| `dmgFileName` | String | No | `null` | If not `null` and not empty, the supplied string will be used as the name (`.dmg` will be appended).
+| `appendVersion` | Boolean | No | `true` | If `true`, append the version to the `.dmg` name |
+| `dmgFileName` | String | No | `null` | If not `null` and not empty, the supplied string will be used as the file name (`.dmg` will be appended). |
 
 ### APP configuration
 
@@ -197,7 +198,7 @@ The following other properties can be added to the `app` element configuring add
 
 
 ```xml
- ...
+...
     <configuration>
         <app>
             <additionalResources>
@@ -211,22 +212,22 @@ The following other properties can be added to the `app` element configuring add
             </additionalResources>
         </app>
     </configuration>
- ...
+...
 ```
 
 ### JDK inclusion
 
-Usually the application bundle built by the plugin will depend upon a Java runtime being available on the machine where the application is executed. To be completely self-sustaining, the plugin supports including the runtime into the target application. That runtime will then be used to launch the application, so there are not dependencies to a JDK being installed locally.
+Usually the application bundle built by the plugin will depend upon a Java runtime being available on the machine where the application is executed. To be completely self-sustaining, the plugin supports including the runtime into the target application. That runtime will then be used to launch the application, so there are no dependencies to a JDK being installed locally.
 
 ```xml
- ...
+...
     <configuration>
-      <jdk>
-        <include>true</include>
-        <location>/where/your/jdk/is/installed</location>
-      </jdk>
+        <jdk>
+            <include>true</include>
+            <location>/where/your/jdk/is/installed</location>
+        </jdk>
     </configuration>
- ...
+...
 ```
 
 The following parameters can be set below the `jdk` configuration element:
@@ -238,18 +239,18 @@ The following parameters can be set below the `jdk` configuration element:
 
 ### Dependencies exclusion
 
-By default all dependencies (both direct dependencies as well as transient dependencies) are included in the generated application bundle.
+By default all declared dependencies (both direct dependencies as well as transient dependencies) are included in the generated application bundle.
 
-If you only want to include the direct application JAR file without any dependencies (e.g. because you've already included the dependencies into the application JAR itself) the you can set the `includeDependencies` flag of the `app` configuration to `false`:
+If you only want to include the direct application JAR file without any dependencies (e.g. because you've already included the dependencies into the application JAR itself) then you can set the `includeDependencies` flag of the `app` configuration to `false`:
 
 ```xml
- ...
+...
     <configuration>
         <app>
             <includeDependencies>false</includeDependencies>
         </app>
     </configuration>
- ...
+...
 ```
 
 ### Native binary selection
