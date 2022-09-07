@@ -20,7 +20,6 @@ package de.perdian.maven.plugins.macosappbundler.mojo;
 import java.io.File;
 import java.io.IOException;
 
-import de.perdian.maven.plugins.macosappbundler.mojo.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -34,6 +33,11 @@ import org.apache.maven.project.MavenProject;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.JdkConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 
 /**
  * Create all artifacts to publish a Java application as macOS application bundle.
@@ -106,13 +110,16 @@ public class BundleMojo extends AbstractMojo {
     }
 
     private String createDmgFileName(String appName) {
-        if (this.dmg.appendVersion) {
-            return appName + "_" + this.project.getVersion() + ".dmg";
-        } else if (this.dmg.dmgFileName == null || this.dmg.dmgFileName.isEmpty()) {
-            return appName + ".dmg";
-        } else {
-            return this.dmg.dmgFileName + ".dmg";
+        String baseName = appName;
+        if (StringUtils.isNotEmpty(this.dmg.dmgFileName)) {
+            baseName = this.dmg.dmgFileName;
         }
+        StringBuilder fullName = new StringBuilder(baseName);
+        if (this.dmg.appendVersion) {
+            fullName.append("_").append(this.project.getVersion());
+        }
+        fullName.append(".dmg");
+        return fullName.toString();
     }
 
     public MavenProject getProject() {
