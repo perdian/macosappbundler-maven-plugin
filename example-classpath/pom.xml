@@ -62,7 +62,7 @@
             <plugin>
                 <groupId>de.perdian.maven.plugins</groupId>
                 <artifactId>macosappbundler-maven-plugin</artifactId>
-                <version>1.18.0</version>
+                <version>1.18.1</version>
                 <configuration>
                     <plist>
                         <JVMMainClassName>de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainClassName>
