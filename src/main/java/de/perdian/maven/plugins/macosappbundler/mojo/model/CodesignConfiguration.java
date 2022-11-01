@@ -24,7 +24,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 public class CodesignConfiguration {
 
-   // https://www.manpagez.com/man/1/codesign/
+    // https://www.manpagez.com/man/1/codesign/
+
+    @Parameter
+    public boolean enable = true;
 
     @Parameter
     public String identity = null;

@@ -199,7 +199,6 @@ The following other properties can be added to the `app` element configuring add
 | --- | ---- | --------- | ------- | ----------- |
 | `additionalResources` | List&lt;Fileset&gt; | No | | Additional files to be copied into the app bundle. |
 
-
 ```xml
 ...
     <configuration>
@@ -236,6 +235,7 @@ The following other properties can be added to the `codesign` element configurin
 
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
+| `enable` | Boolean | No | `true` | Whether or not to sign the created application bundle. |
 | `identity` | String | Yes | | The identity of the signer. Required if the `codesign` element is present. |
 | `preserveMetadata` | List&lt;String&gt; | No | `entitlements` | |
 

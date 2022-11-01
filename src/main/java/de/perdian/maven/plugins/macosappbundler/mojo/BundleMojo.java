@@ -99,7 +99,7 @@ public class BundleMojo extends AbstractMojo {
             appGenerator.setNativeBinaryType(this.nativeBinary);
             appGenerator.generateApp(this.project, appDirectory);
 
-            if (StringUtils.isNotEmpty(this.codesign.identity)) {
+            if (this.codesign.enable && StringUtils.isNotEmpty(this.codesign.identity)) {
                 SignatureGenerator signatureGenerator = new SignatureGenerator(this.codesign, this.getLog());
                 signatureGenerator.sign(appDirectory);
             }
