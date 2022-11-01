@@ -4,7 +4,7 @@
     <groupId>de.perdian.maven.plugins</groupId>
     <artifactId>macosappbundler-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.18.1</version>
+    <version>1.19.0-SNAPSHOT</version>
 
     <name>macOS app bundler Maven plugin</name>
     <description>Maven plugin to create a macOS application bundle</description>
@@ -39,9 +39,10 @@
 
     <properties>
 
-        <file-management.version>3.0.0</file-management.version>
-        <junit.version>5.8.2</junit.version>
-        <maven.version>3.8.4</maven.version>
+        <file-management.version>3.1.0</file-management.version>
+        <java.version>9</java.version>
+        <junit.version>5.9.1</junit.version>
+        <maven.version>3.8.6</maven.version>
         <maven.annotations.version>3.6.4</maven.annotations.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -54,7 +55,7 @@
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>compile-native-executable</id>
@@ -72,10 +73,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -182,7 +183,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -192,7 +193,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <source>9</source>
+                            <source>${java.version}</source>
                         </configuration>
                     </plugin>
                     <plugin>

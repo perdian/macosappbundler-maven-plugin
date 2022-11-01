@@ -24,8 +24,8 @@
     </developers>
 
     <properties>
-        <java.version>11</java.version>
-        <javafx.version>11.0.2</javafx.version>
+        <java.version>18</java.version>
+        <javafx.version>18</javafx.version>
     </properties>
 
     <dependencies>
@@ -62,7 +62,7 @@
             <plugin>
                 <groupId>de.perdian.maven.plugins</groupId>
                 <artifactId>macosappbundler-maven-plugin</artifactId>
-                <version>1.18.1</version>
+                <version>1.19.0-SNAPSHOT</version>
                 <configuration>
                     <plist>
                         <JVMMainModuleName>de.perdian.maven.plugins.macosappbundler.example/de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainModuleName>
