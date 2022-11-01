@@ -19,7 +19,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.18.1</version>
+        <version>1.90.0</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -44,7 +44,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.18.1</version>
+        <version>1.19.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -72,6 +72,9 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
                     </additionalResource>
                 </additionalResources>
             </dmg>
+            <codesign>
+                <identity>3rd Party Mac Developer Application: MyName (MyNumber)</identity>
+            </codesign>
         </configuration>
         <executions>
             <execution>
@@ -92,7 +95,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.18.1</version>
+        <version>1.19.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -214,6 +217,27 @@ The following other properties can be added to the `app` element configuring add
     </configuration>
 ...
 ```
+
+### Code signing
+
+The plugin can automatically sign the created application bundle if a codesign identiy is given:
+
+```
+...
+    <configuration>
+        <codesign>
+            <identity>3rd Party Mac Developer Application: MyName (MyNumber)</identity>
+        </codesign>
+    </configuration>
+...
+```
+
+The following other properties can be added to the `codesign` element configuring additional options for signing:
+
+| Key | Type | Required? | Default | Description |
+| --- | ---- | --------- | ------- | ----------- |
+| `identity` | String | Yes | | The identity of the signer. Required if the `codesign` element is present. |
+| `preserveMetadata` | List<String> | No | `entitlements` | |
 
 ### JDK inclusion
 

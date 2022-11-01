@@ -33,7 +33,9 @@ import org.apache.maven.project.MavenProject;
 
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.AppGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.impl.DmgGenerator;
+import de.perdian.maven.plugins.macosappbundler.mojo.impl.SignatureGenerator;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.CodesignConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.DmgConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.JdkConfiguration;
 import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
@@ -64,6 +66,9 @@ public class BundleMojo extends AbstractMojo {
     @Parameter
     private NativeBinaryType nativeBinary = NativeBinaryType.UNIVERSAL;
 
+    @Parameter
+    private CodesignConfiguration codesign = new CodesignConfiguration();
+
     @Override
     public void execute() throws MojoExecutionException {
         Validate.notNull(this.getProject(), "MavenProject cannot be null");
@@ -93,6 +98,11 @@ public class BundleMojo extends AbstractMojo {
             appGenerator.setJdkLocation(this.jdk.location);
             appGenerator.setNativeBinaryType(this.nativeBinary);
             appGenerator.generateApp(this.project, appDirectory);
+
+            if (StringUtils.isNotEmpty(this.codesign.identity)) {
+                SignatureGenerator signatureGenerator = new SignatureGenerator(this.codesign, this.getLog());
+                signatureGenerator.sign(appDirectory);
+            }
 
             if (this.dmg.generate) {
                 File bundleDirectory = new File(targetDirectory, "bundle");
