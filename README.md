@@ -175,7 +175,7 @@ The following values can be configured:
 | `NSHighResolutionCapable` | Boolean | No | `true` | Declares if the application supports rendering in HiDPI (Retina) ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshighresolutioncapable)). |
 | `NSHumanReadableCopyright` | String | No | | A human-readable copyright notice for the bundle ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshumanreadablecopyright/)). |
 | `NSMicrophoneUsageDescription` | String | No | | A message that tells the user why the application is requesting access to the device's microphone ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nsmicrophoneusagedescription)). |
-| `NSSupportsAutomaticGraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching)). |
+| `NSSupportsAutomatic` `GraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching)). |
 
 ### DMG configuration
 
