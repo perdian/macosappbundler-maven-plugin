@@ -4,11 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.18.1...v1.19.0) - 2022-11-01
+
+### Added
+
+- Support for application signing (https://github.com/perdian/macosappbundler-maven-plugin/issues/35).
+
+
 ## [1.18.1](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.18.0...v1.18.1) - 2022-09-25
 
 ### Fixed
 
-- DMG file name not computed correctly (#39)
+- DMG file name not computed correctly (https://github.com/perdian/macosappbundler-maven-plugin/issues/39).
 
 
 ## [1.18.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.17.1...v1.18.0) - 2022-06-21
@@ -22,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Embedded JDK or JRE is now stored inside the bundle in the `Contents/Java/runtime` directory (https://github.com/perdian/macosappbundler-maven-plugin/pull/36)
+- Embedded JDK or JRE is now stored inside the bundle in the `Contents/Java/runtime` directory (https://github.com/perdian/macosappbundler-maven-plugin/pull/36).
 
 
 ## [1.17.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.16.0...v1.17.0) - 2022-01-23
