@@ -184,7 +184,7 @@ The following other properties can be added to the `dmg` element configuring the
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
 | `generate` | Boolean | No | `false` | Whether or not to create a `DMG` archive. |
-| `additionalResources` | List<Fileset> | No | | List of additional files to be copied into the archive. |
+| `additionalResources` | List&lt;Fileset&gt; | No | | List of additional files to be copied into the archive. |
 | `createApplicationsSymlink` | Boolean | No | `true` | Whether or not to include a link to the Applications folder inside the archive. |
 | `useGenIsoImage` | Boolean | No | `false` | Whether or not to use `genisoimage` to create the archive. Default is `hdiutil`. |
 | `autoFallback` | Boolean | No | `false` | If `true`, try the other archive generation method when the first one fails. (e.g. run `hdiutil` when `genisoimage` fails and vice-versa) |
@@ -197,7 +197,7 @@ The following other properties can be added to the `app` element configuring add
 
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
-| `additionalResources` | List<Fileset> | No | | Additional files to be copied into the app bundle. |
+| `additionalResources` | List&lt;Fileset&gt; | No | | Additional files to be copied into the app bundle. |
 
 
 ```xml
@@ -237,7 +237,7 @@ The following other properties can be added to the `codesign` element configurin
 | Key | Type | Required? | Default | Description |
 | --- | ---- | --------- | ------- | ----------- |
 | `identity` | String | Yes | | The identity of the signer. Required if the `codesign` element is present. |
-| `preserveMetadata` | List<String> | No | `entitlements` | |
+| `preserveMetadata` | List&lt;String&gt; | No | `entitlements` | |
 
 ### JDK inclusion
 
