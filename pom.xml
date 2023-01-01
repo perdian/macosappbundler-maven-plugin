@@ -4,7 +4,7 @@
     <groupId>de.perdian.maven.plugins</groupId>
     <artifactId>macosappbundler-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.19.0</version>
+    <version>1.20.0</version>
 
     <name>macOS app bundler Maven plugin</name>
     <description>Maven plugin to create a macOS application bundle</description>
@@ -52,24 +52,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>compile-native-executable</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${maven.compile-native-executable.skip}</skip>
-                            <executable>${basedir}/compile-native-executable.sh</executable>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

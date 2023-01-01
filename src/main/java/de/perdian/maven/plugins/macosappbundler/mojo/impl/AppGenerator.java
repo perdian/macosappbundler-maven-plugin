@@ -29,8 +29,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -87,44 +85,17 @@ public class AppGenerator {
     private void copyApplicationClasses(MavenProject project, File appJavaDirectory) throws MojoExecutionException {
         this.getLog().info("Copy application classes to: " + appJavaDirectory.getAbsolutePath());
         try {
-            if (StringUtils.isNotEmpty(this.getPlistConfiguration().JVMMainClassName)) {
-                this.copyClasspathApplicationClasses(project, new File(appJavaDirectory, "classpath"));
-            } else if (StringUtils.isNotEmpty(this.getPlistConfiguration().JVMMainModuleName)) {
-                this.copyModulesApplicationClasses(project, new File(appJavaDirectory, "modules"));
+            this.copyModulesApplicationClassesArtifact(project.getArtifact(), appJavaDirectory);
+            File modulesDirectory = new File(appJavaDirectory, "lib");
+            if (this.getAppConfiguration().isIncludeDependencies()) {
+                for (Artifact artifact : project.getArtifacts()) {
+                    this.copyModulesApplicationClassesArtifact(artifact, modulesDirectory);
+                }
+            } else {
+                this.getLog().debug("Inclusion of dependencies has been disbaled");
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot copy dependencies", e);
-        }
-    }
-
-    private void copyClasspathApplicationClasses(MavenProject project, File classpathDirectory) throws IOException {
-        ArtifactRepositoryLayout repositoryLayout = new DefaultRepositoryLayout();
-        this.copyClasspathApplicationDependencyArtifact(project.getArtifact(), classpathDirectory, repositoryLayout);
-        if (this.getAppConfiguration().isIncludeDependencies()) {
-            for (Artifact artifact : project.getArtifacts()) {
-                this.copyClasspathApplicationDependencyArtifact(artifact, classpathDirectory, repositoryLayout);
-            }
-        } else {
-            this.getLog().debug("Inclusion of dependencies has been disbaled");
-        }
-    }
-
-    private void copyClasspathApplicationDependencyArtifact(Artifact artifact, File targetDirectory, ArtifactRepositoryLayout repositoryLayout) throws IOException {
-        File targetFile = new File(targetDirectory, repositoryLayout.pathOf(artifact));
-        if (!targetFile.getParentFile().exists()) {
-            targetFile.getParentFile().mkdirs();
-        }
-        FileUtils.copyFile(artifact.getFile(), targetFile);
-    }
-
-    private void copyModulesApplicationClasses(MavenProject project, File modulesDirectory) throws IOException {
-        this.copyModulesApplicationClassesArtifact(project.getArtifact(), modulesDirectory);
-        if (this.getAppConfiguration().isIncludeDependencies()) {
-            for (Artifact artifact : project.getArtifacts()) {
-                this.copyModulesApplicationClassesArtifact(artifact, modulesDirectory);
-            }
-        } else {
-            this.getLog().debug("Inclusion of dependencies has been disbaled");
         }
     }
 
@@ -170,6 +141,10 @@ public class AppGenerator {
         if (StringUtils.isNotEmpty(iconFileName)) {
             additionalProperties.put("CFBundleIconFile", iconFileName);
         }
+        String splashFileName = this.copySplash(project, contentsDirectory);
+        if (StringUtils.isNotEmpty(splashFileName)) {
+            additionalProperties.put("JVMSplashFile", splashFileName);
+        }
         try {
             File plistFile = new File(contentsDirectory, "Info.plist");
             this.getLog().info("Generating Info.plist");
@@ -179,6 +154,30 @@ public class AppGenerator {
         }
     }
 
+    private String copySplash(MavenProject project, File contentsDirectory) throws MojoExecutionException {
+        String iconFileValue = this.getPlistConfiguration().JVMSplashFile;
+        if (StringUtils.isNotEmpty(iconFileValue)) {
+            File iconFile = new File(project.getBasedir(), iconFileValue);
+            if (!iconFile.exists()) {
+                throw new MojoExecutionException("Cannot find declared splash file " + iconFile.getName() + " at: " + iconFile.getAbsolutePath());
+            } else {
+                File resourcesDirectory = new File(contentsDirectory, "Resources");
+                File targetFile = new File(resourcesDirectory, iconFile.getName());
+                if (!targetFile.getParentFile().exists()) {
+                    targetFile.getParentFile().mkdirs();
+                }
+                try {
+                    FileUtils.copyFile(iconFile, targetFile);
+                    return targetFile.getName();
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Cannot copy splash file to: " + targetFile.getAbsolutePath(), e);
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+    
     private String copyIcon(MavenProject project, File contentsDirectory) throws MojoExecutionException {
         String iconFileValue = this.getPlistConfiguration().CFBundleIconFile;
         if (StringUtils.isNotEmpty(iconFileValue)) {
