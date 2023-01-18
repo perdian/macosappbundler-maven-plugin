@@ -239,6 +239,18 @@ The following other properties can be added to the `codesign` element configurin
 | `identity` | String | Yes | | The identity of the signer. Required if the `codesign` element is present. |
 | `preserveMetadata` | List&lt;String&gt; | No | `entitlements` | |
 
+To sign the application using a local dummy identity (which will only work on the machine where the signing was performed) you can use:
+
+```
+...
+    <configuration>
+        <codesign>
+            <identity>-</identity>
+        </codesign>
+    </configuration>
+...
+```
+
 ### JDK inclusion
 
 Usually the application bundle built by the plugin will depend upon a Java runtime being available on the machine where the application is executed. To be completely self-sustaining, the plugin supports including the runtime into the target application. That runtime will then be used to launch the application, so there are no dependencies to a JDK being installed locally.
