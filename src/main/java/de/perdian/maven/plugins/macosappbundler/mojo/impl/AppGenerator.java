@@ -170,6 +170,10 @@ public class AppGenerator {
         if (StringUtils.isNotEmpty(iconFileName)) {
             additionalProperties.put("CFBundleIconFile", iconFileName);
         }
+        String splashFileName = this.copySplash(project, contentsDirectory);
+        if (StringUtils.isNotEmpty(splashFileName)) {
+            additionalProperties.put("JVMSplashFile", splashFileName);
+        }
         try {
             File plistFile = new File(contentsDirectory, "Info.plist");
             this.getLog().info("Generating Info.plist");
@@ -238,6 +242,30 @@ public class AppGenerator {
             FileUtils.copyDirectory(sourceDirectory, targetDirectory);
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot copy JDK from directory at: " + sourceDirectory.getAbsolutePath(), e);
+        }
+    }
+    
+    private String copySplash(MavenProject project, File contentsDirectory) throws MojoExecutionException {
+        String iconFileValue = this.getPlistConfiguration().JVMSplashFile;
+        if (StringUtils.isNotEmpty(iconFileValue)) {
+            File iconFile = new File(project.getBasedir(), iconFileValue);
+            if (!iconFile.exists()) {
+                throw new MojoExecutionException("Cannot find declared splash file " + iconFile.getName() + " at: " + iconFile.getAbsolutePath());
+            } else {
+                File resourcesDirectory = new File(contentsDirectory, "Resources");
+                File targetFile = new File(resourcesDirectory, iconFile.getName());
+                if (!targetFile.getParentFile().exists()) {
+                    targetFile.getParentFile().mkdirs();
+                }
+                try {
+                    FileUtils.copyFile(iconFile, targetFile);
+                    return targetFile.getName();
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Cannot copy splash file to: " + targetFile.getAbsolutePath(), e);
+                }
+            }
+        } else {
+            return null;
         }
     }
 

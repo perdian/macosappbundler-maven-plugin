@@ -86,7 +86,9 @@ public class PlistConfiguration {
 
     @Parameter
     public String JVMLogLevel = null;
-
+    
+    @Parameter
+ 	public String JVMSplashFile = null;
     @Parameter
     public Boolean NSHighResolutionCapable = Boolean.TRUE;
 
