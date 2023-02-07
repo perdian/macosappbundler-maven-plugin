@@ -42,7 +42,7 @@
         <file-management.version>3.1.0</file-management.version>
         <java.version>9</java.version>
         <junit.version>5.9.1</junit.version>
-        <maven.version>3.8.7</maven.version>
+        <maven.version>3.9.0</maven.version>
         <maven.annotations.version>3.7.1</maven.annotations.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
