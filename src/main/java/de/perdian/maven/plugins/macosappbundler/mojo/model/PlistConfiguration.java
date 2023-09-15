@@ -108,6 +108,9 @@ public class PlistConfiguration {
     @Parameter
     public Boolean NSAppSleepDisabled = null;
 
+    @Parameter
+    public String NSAppleMusicUsageDescription = null;
+    
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -152,6 +155,7 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "NSCameraUsageDescription", this.NSCameraUsageDescription);
         this.appendKeyWithString(dictElement, document, "NSHumanReadableCopyright", this.NSHumanReadableCopyright);
         this.appendKeyWithBoolean(dictElement, document, "NSAppSleepDisabled", this.NSAppSleepDisabled);
+        this.appendKeyWithString(dictElement, document, "NSAppleMusicUsageDescription", this.NSAppleMusicUsageDescription);
         for (Map.Entry<String, String> additionalValue : additionalValues.entrySet()) {
             this.appendKeyWithString(dictElement, document, additionalValue.getKey(), additionalValue.getValue());
         }
