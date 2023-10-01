@@ -170,6 +170,7 @@ The following values can be configured:
 | `JVMRuntimePath` | String | No | | The exact location of the Java runtime. |
 | `JVMVersion` | String | No | | The Java version your application needs to work. Can either be an explicit version String like `11.0.1`, a major version like `11` (signalizing that *any* Java 11 runtime is sufficient) or a value like `11+` (signalizing that *any* Java 11 *or higher* runtime is sufficient). |
 | `LSUIElement` | Boolean | No | | Declares if the application is an agent app that runs in the background and doesn't appear in the Dock ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/lsuielement)). |
+| `NSAppleMusicUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the user’s media library. |
 | `NSAppSleepDisabled` | Boolean | No | | Declares if the app is allowed to nap or not. |
 | `NSCameraUsageDescription` | String | No | | A message that tells the user why the app is requesting access to the device's camera ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription)). |
 | `NSHighResolutionCapable` | Boolean | No | `true` | Declares if the application supports rendering in HiDPI (Retina) ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshighresolutioncapable)). |
