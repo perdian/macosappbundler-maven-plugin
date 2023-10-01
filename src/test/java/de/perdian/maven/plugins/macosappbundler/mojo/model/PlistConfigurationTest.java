@@ -61,6 +61,8 @@ public class PlistConfigurationTest {
             "        <string>com.test.bundle.module.main</string>\n" +
             "        <key>NSHighResolutionCapable</key>\n" +
             "        <true/>\n" +
+            "        <key>NSSupportsAutomaticGraphicsSwitching</key>\n" +
+            "        <true/>\n" +
             "        <key>CFBundleIconFile</key>\n" +
             "        <string>test.icns</string>\n" +
             "    </dict>\n" +
