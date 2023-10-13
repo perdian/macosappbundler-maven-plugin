@@ -42,9 +42,8 @@
         <file-management.version>3.1.0</file-management.version>
         <java.version>9</java.version>
         <junit.version>5.9.1</junit.version>
-        <maven.version>3.9.0</maven.version>
+        <maven.version>3.9.2</maven.version>
         <maven.annotations.version>3.9.0</maven.annotations.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compile-native-executable.skip>false</maven.compile-native-executable.skip>
 
@@ -66,7 +65,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.9.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -152,7 +151,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.3.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
