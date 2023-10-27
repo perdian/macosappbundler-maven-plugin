@@ -86,6 +86,9 @@ public class PlistConfiguration {
 
     @Parameter
     public String JVMLogLevel = null;
+    
+    @Parameter
+	public String JVMSplashFile = null;
 
     @Parameter
     public Boolean NSHighResolutionCapable = Boolean.TRUE;
@@ -110,7 +113,6 @@ public class PlistConfiguration {
 
     @Parameter
     public String NSAppleMusicUsageDescription = null;
-    
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

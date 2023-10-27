@@ -1,7 +1,0 @@
-/*
- * We need to explicitely use a dedicated font until the following issue is resolved:
- * https://github.com/openjdk/jfx/pull/55
- */
-.root {
-    -fx-font-family: Helvetica, Arial, SansSerif;
-}
