@@ -17,14 +17,10 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import de.perdian.maven.plugins.macosappbundler.mojo.impl.support.IO;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
+import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,10 +32,16 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.model.fileset.FileSet;
 
-import de.perdian.maven.plugins.macosappbundler.mojo.impl.support.IO;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.AppConfiguration;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.NativeBinaryType;
-import de.perdian.maven.plugins.macosappbundler.mojo.model.PlistConfiguration;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AppGenerator {
 
@@ -231,13 +233,30 @@ public class AppGenerator {
     }
 
     private void copyJdkFromDirectory(File targetDirectory, File sourceDirectory) throws MojoExecutionException {
-        if (!targetDirectory.exists()) {
-            targetDirectory.mkdirs();
-        }
+        Path sourceDirectoryPath = sourceDirectory.toPath();
+        Path targetDirectoryPath = targetDirectory.toPath();
         try {
-            FileUtils.copyDirectory(sourceDirectory, targetDirectory);
+            Files.walk(sourceDirectoryPath).forEach(sourcePath -> {
+                try {
+                    Path sourcePathRelative = sourceDirectoryPath.relativize(sourcePath);
+                    Path targetPath = targetDirectoryPath.resolve(sourcePathRelative);
+                    if (Files.isDirectory(sourcePath)) {
+                        if (!Files.exists(targetPath)) {
+                            Files.createDirectory(targetPath);
+                        }
+                    } else {
+                        if (!Files.exists(targetPath.getParent())) {
+                            Files.createDirectories(targetPath.getParent());
+                        }
+                        this.getLog().debug("Copying JDK file from '" + sourcePath + "' to '" + targetPath + "'");
+                        Files.copy(sourcePath, targetPath, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException("Cannot copy JDK directory '" + sourceDirectory + "' to '" + targetDirectory + "'", e);
+                }
+            });
         } catch (IOException e) {
-            throw new MojoExecutionException("Cannot copy JDK from directory at: " + sourceDirectory.getAbsolutePath(), e);
+            throw new RuntimeException("Cannot copy JDK directory '" + sourceDirectory + "' to '" + targetDirectory + "'", e);
         }
     }
 
