@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - JDK file attributes not always copied correctly (https://github.com/perdian/macosappbundler-maven-plugin/issues/46).
 
-### Added
-
-- Support [`NSAppleMusicUsageDescription`](https://developer.apple.com/documentation/bundleresources/information_property_list/NSAppleMusicUsageDescription) configuration property.
 
 ## [1.20.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.19.0...v1.20.0) - 2023-10-01
 
