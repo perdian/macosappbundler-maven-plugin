@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.1](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.20.0...v1.20.1) - 2023-11-25
+
+### Fixed
+
+- JDK file attributes not always copied correctly (https://github.com/perdian/macosappbundler-maven-plugin/issues/46).
+
+### Added
+
+- Support [`NSAppleMusicUsageDescription`](https://developer.apple.com/documentation/bundleresources/information_property_list/NSAppleMusicUsageDescription) configuration property.
+
 ## [1.20.0](https://github.com/perdian/macosappbundler-maven-plugin/compare/v1.19.0...v1.20.0) - 2023-10-01
 
 ### Added
