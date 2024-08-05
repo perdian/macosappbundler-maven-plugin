@@ -17,9 +17,10 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,11 +29,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 public class PlistConfiguration {
 
@@ -55,7 +54,7 @@ public class PlistConfiguration {
     public String CFBundleExecutable = null;
 
     @Parameter
-    public List<String> CFBundleTypeExtensions = null;
+    public List<CFBundleDocumentTypesConfiguration> CFBundleDocumentTypes = null;
 
     @Parameter
     public List<String> CFBundleURLTypes = null;
@@ -110,7 +109,7 @@ public class PlistConfiguration {
 
     @Parameter
     public String NSAppleMusicUsageDescription = null;
-    
+
     public String toXmlString(Map<String, String> additionalValues) throws Exception {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -137,9 +136,9 @@ public class PlistConfiguration {
         this.appendKeyWithString(dictElement, document, "CFBundleIdentifier", this.CFBundleIdentifier);
         this.appendKeyWithString(dictElement, document, "CFBundleName", this.CFBundleName);
         this.appendKeyWithString(dictElement, document, "CFBundleShortVersionString", this.CFBundleShortVersionString);
-        this.appendKeyWithArrayOfStrings(dictElement, document, "CFBundleTypeExtensions", this.CFBundleTypeExtensions);
         this.appendKeyWithString(dictElement, document, "CFBundleDevelopmentRegion", this.CFBundleDevelopmentRegion);
         this.appendKeyWithString(dictElement, document, "CFBundlePackageType", this.CFBundlePackageType);
+        this.appendCFBundleDocumentTypes(dictElement, document, this.CFBundleDocumentTypes);
         this.appendCFBundleURLTypes(dictElement, document, this.CFBundleURLTypes);
         this.appendKeyWithArrayOfStrings(dictElement, document, "JVMArguments", this.JVMArguments);
         this.appendKeyWithString(dictElement, document, "JVMMainClassName", this.JVMMainClassName);
@@ -212,6 +211,24 @@ public class PlistConfiguration {
             Element arrayDictElement = document.createElement("dict");
             this.appendKeyWithArrayOfStrings(arrayDictElement, document, "CFBundleURLSchemes", value);
             arrayElement.appendChild(arrayDictElement);
+            dictElement.appendChild(arrayElement);
+        }
+    }
+
+    private void appendCFBundleDocumentTypes(Element dictElement, Document document, List<CFBundleDocumentTypesConfiguration> value) {
+        if (value != null && !value.isEmpty()) {
+            Element keyElement = document.createElement("key");
+            keyElement.setTextContent("CFBundleDocumentTypes");
+            dictElement.appendChild(keyElement);
+            Element arrayElement = document.createElement("array");
+            for (CFBundleDocumentTypesConfiguration valueItem : value) {
+                Element itemDictElement = document.createElement("dict");
+                this.appendKeyWithArrayOfStrings(itemDictElement, document, "CFBundleTypeExtensions", valueItem.CFBundleTypeExtensions);
+                this.appendKeyWithString(itemDictElement, document, "CFBundleTypeName", valueItem.CFBundleTypeName);
+                this.appendKeyWithArrayOfStrings(itemDictElement, document, "CFBundleTypeOSTypes", valueItem.CFBundleTypeOSTypes);
+                this.appendKeyWithString(itemDictElement, document, "CFBundleTypeRole", valueItem.CFBundleTypeRole);
+                arrayElement.appendChild(itemDictElement);
+            }
             dictElement.appendChild(arrayElement);
         }
     }

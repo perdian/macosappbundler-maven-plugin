@@ -62,7 +62,7 @@
             <plugin>
                 <groupId>de.perdian.maven.plugins</groupId>
                 <artifactId>macosappbundler-maven-plugin</artifactId>
-                <version>1.19.0-SNAPSHOT</version>
+                <version>1.21.0-SNAPSHOT</version>
                 <configuration>
                     <plist>
                         <JVMMainClassName>de.perdian.maven.plugins.macosappbundler.example.ExampleApplicationLauncher</JVMMainClassName>
@@ -71,6 +71,19 @@
                             <string>-Dapple.laf.useScreenMenuBar=true</string>
                             <string>-Xdock:name=${project.name}</string>
                         </JVMOptions>
+                        <CFBundleDocumentTypes>
+                            <CFBundleDocumentTypes>
+                                <CFBundleTypeName>MyDocumentType</CFBundleTypeName>
+                                <CFBundleTypeRole>Editor</CFBundleTypeRole>
+                                <CFBundleTypeExtensions>
+                                    <string>mydoc</string>
+                                    <string>mydocx</string>
+                                </CFBundleTypeExtensions>
+                                <CFBundleTypeOSTypes>
+                                    <string>MDOC</string>
+                                </CFBundleTypeOSTypes>
+                            </CFBundleDocumentTypes>
+                        </CFBundleDocumentTypes>
                     </plist>
                     <app>
                         <additionalResources>

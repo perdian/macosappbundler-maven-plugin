@@ -19,7 +19,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.20.1</version>
+        <version>1.21.0</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -44,7 +44,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.20.1</version>
+        <version>1.21.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -95,7 +95,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.20.1</version>
+        <version>1.21.0</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -160,7 +160,7 @@ The following values can be configured:
 | `CFBundleName` | String | No | `${project.name}` | The internal name of your application. |
 | `CFBundlePackageType` | String | No | `APPL` | A four-letter code specifying the bundle type. For apps, the code is `APPL`, for frameworks, it' `FMWK`, and for bundles, it's `BNDL` ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundlepackagetype)) |
 | `CFBundleShortVersionString` | String | No | `${version}` | The version of your application. |
-| `CFBundleTypeExtensions` | Array of Strings | No |  | A list of file extensions this application can handle ([Details](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html)). |
+| `CFBundleDocumentTypes` | Array of CFBundleDocumentTypes | No |  | Additional information for document types (see [details](#CFBundleDocumentTypes-configuration-example) for an extended example). |
 | `CFBundleURLTypes` | Array of Strings | No | | A list of URL schemes (`http`, `ftp`, etc.) supported by the application. |
 | `JVMArguments` | Array of Strings | No | | Additional arguments to be passed to the Java runtime. |
 | `JVMLogLevel` | String | No | `INFO` | The amount of details the launcher will print to the console if called directly from the command line. Possible values: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. |
@@ -177,6 +177,37 @@ The following values can be configured:
 | `NSHumanReadableCopyright` | String | No | | A human-readable copyright notice for the bundle ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nshumanreadablecopyright/)). |
 | `NSMicrophoneUsageDescription` | String | No | | A message that tells the user why the application is requesting access to the device's microphone ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nsmicrophoneusagedescription)). |
 | `NSSupportsAutomatic` `GraphicsSwitching` | Boolean | No | `true` | Declares whether an OpenGL app may utilize the integrated GPU ([Details](https://developer.apple.com/documentation/bundleresources/information_property_list/nssupportsautomaticgraphicsswitching)). |
+
+### CFBundleDocumentTypes configuration example
+
+```xml
+    <configuration>
+        <plist>
+            ...
+            <CFBundleDocumentTypes>
+                <CFBundleDocumentTypes>
+                    <CFBundleTypeName>MyDocumentType</CFBundleTypeName>
+                    <CFBundleTypeRole>Editor</CFBundleTypeRole>
+                    <CFBundleTypeExtensions>
+                        <string>foo</string>
+                        <string>foobar</string>
+                    </CFBundleTypeExtensions>
+                </CFBundleDocumentTypes>
+                <CFBundleDocumentTypes>
+                    <CFBundleTypeName>AnotherDocumentType</CFBundleTypeName>
+                    <CFBundleTypeRole>Editor</CFBundleTypeRole>
+                    <CFBundleTypeExtensions>
+                        <string>x</string>
+                        <string>y</string>
+                    </CFBundleTypeExtensions>
+                </CFBundleDocumentTypes>
+            </CFBundleDocumentTypes>
+            ...
+        </plist>
+    </configuration>
+```
+
+*Yes, the `CFBundleDocumentTypes` has to be entered twice: First as the parent for additional configurations and then for each configuration you want to define.*
 
 ### DMG configuration
 
