@@ -2,7 +2,7 @@
 
 Maven plugin for creating a native [macOS bundle](https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW19) containing all dependencies declared by a Maven project.
 
-[![Maven Central](https://img.shields.io/maven-central/v/de.perdian.maven.plugins/macosappbundler-maven-plugin.svg)](https://mvnrepository.com/artifact/de.perdian.maven.plugins/macosappbundler-maven-plugin)
+[![Maven~~~~ Central](https://img.shields.io/maven-central/v/de.perdian.maven.plugins/macosappbundler-maven-plugin.svg)](https://mvnrepository.com/artifact/de.perdian.maven.plugins/macosappbundler-maven-plugin)
 [![License](http://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Build](https://img.shields.io/circleci/build/github/perdian/macosappbundler-maven-plugin/master)](https://circleci.com/gh/perdian/macosappbundler-maven-plugin)
 
@@ -19,7 +19,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.0</version>
+        <version>1.21.1</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -44,7 +44,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.0</version>
+        <version>1.21.1</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -95,7 +95,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.0</version>
+        <version>1.21.1</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
