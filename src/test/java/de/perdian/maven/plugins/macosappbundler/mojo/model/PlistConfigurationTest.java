@@ -16,15 +16,14 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Test;
 
 public class PlistConfigurationTest {
 
@@ -61,6 +60,8 @@ public class PlistConfigurationTest {
             "        <string>com.test.bundle.module.main</string>\n" +
             "        <key>NSHighResolutionCapable</key>\n" +
             "        <true/>\n" +
+            "        <key>LSUIElement</key>\n" +
+            "        <string>true</string>\n" +
             "        <key>NSSupportsAutomaticGraphicsSwitching</key>\n" +
             "        <true/>\n" +
             "        <key>CFBundleIconFile</key>\n" +
@@ -76,8 +77,7 @@ public class PlistConfigurationTest {
         additionalProperties.put("CFBundleIconFile", "test.icns");
         String plistXml = plist.toXmlString(additionalProperties);
 
-        assertNotNull(plistXml);
-        assertEquals(EXPECTED_PLIST_XML, plistXml);
+        MatcherAssert.assertThat(plistXml, IsEqual.equalTo(EXPECTED_PLIST_XML));
     }
 
     static PlistConfiguration generatePlist() throws Exception {
@@ -91,6 +91,7 @@ public class PlistConfigurationTest {
         plist.JVMMainClassName = StringUtils.defaultIfEmpty(plist.JVMMainClassName, "com.test.bundle.main");
         plist.JVMMainModuleName = StringUtils.defaultIfEmpty(plist.JVMMainModuleName, "com.test.bundle.module.main");
         plist.CFBundleURLTypes = Arrays.asList("xxx", "yyy", "zzz");
+        plist.LSUIElement = Boolean.TRUE;
         return plist;
     }
 }

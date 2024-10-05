@@ -40,6 +40,7 @@
     <properties>
 
         <file-management.version>3.1.0</file-management.version>
+        <hamcrest.version>3.0</hamcrest.version>
         <java.version>9</java.version>
         <junit.version>5.10.0</junit.version>
         <maven.version>3.9.4</maven.version>
@@ -139,6 +140,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
