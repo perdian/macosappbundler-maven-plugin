@@ -19,7 +19,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.1</version>
+        <version>1.21.2</version>
         <configuration>
             <plist>
                 <JVMMainClassName>de.perdian.test.YourApplication</JVMMainClassName>
@@ -44,7 +44,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.1</version>
+        <version>1.21.2</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -95,7 +95,7 @@ Maven plugin for creating a native [macOS bundle](https://developer.apple.com/li
     <plugin>
         <groupId>de.perdian.maven.plugins</groupId>
         <artifactId>macosappbundler-maven-plugin</artifactId>
-        <version>1.21.1</version>
+        <version>1.21.2</version>
         <configuration>
             <plist>
                 <CFBundleIconFile>src/bundle/test.icns</CFBundleIconFile>
@@ -307,7 +307,7 @@ The following parameters can be set below the `jdk` configuration element:
 
 ### Dependencies exclusion
 
-By default all declared dependencies (both direct dependencies as well as transient dependencies) are included in the generated application bundle.
+By default, all declared dependencies (both direct dependencies as well as transient dependencies) are included in the generated application bundle.
 
 If you only want to include the direct application JAR file without any dependencies (e.g. because you've already included the dependencies into the application JAR itself) then you can set the `includeDependencies` flag of the `app` configuration to `false`:
 
@@ -321,9 +321,24 @@ If you only want to include the direct application JAR file without any dependen
 ...
 ```
 
+### Classifier selection
+
+By default, the default classifier of the project is used to determine the location of the application JAR file. This can be overridden by setting the `classifier` property of the `app` configuration:
+
+```xml
+...
+    <configuration>
+        <app>
+            <classifier>some-classifier</classifier>
+        </app>
+    </configuration>
+...
+```
+
+
 ### Native binary selection
 
-By default the launcher contains a [universal binary](https://en.wikipedia.org/wiki/Universal_binary#Universal_2) that allows running the application on both the classic x86_64 as well as the new arm64 architecture.
+By default, the launcher contains a [universal binary](https://en.wikipedia.org/wiki/Universal_binary#Universal_2) that allows running the application on both the classic x86_64 as well as the new arm64 architecture.
 
 In case any problems occur with the universal binary (or if you want to support only a specific architecture) you can select which binary should be bundled with your application via the `nativeBinary` setting:
 

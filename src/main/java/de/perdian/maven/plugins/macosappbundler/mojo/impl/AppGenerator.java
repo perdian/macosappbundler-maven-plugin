@@ -101,13 +101,7 @@ public class AppGenerator {
 
     private void copyClasspathApplicationClasses(MavenProject project, File classpathDirectory) throws IOException {
         ArtifactRepositoryLayout repositoryLayout = new DefaultRepositoryLayout();
-        String classifier = this.getAppConfiguration().getPrimaryArtifactClassifier();
-    	Artifact primaryArtifact = null;
-    	if (classifier != null && !classifier.isEmpty())  for (Artifact attachedArtifact : project.getAttachedArtifacts()) {
-            if (classifier.equals(attachedArtifact.getClassifier())) primaryArtifact = attachedArtifact;
-        }
-    	if (primaryArtifact == null) primaryArtifact = project.getArtifact();
-        
+        Artifact primaryArtifact = this.resolvePrimaryArtifact(project);
         this.copyClasspathApplicationDependencyArtifact(primaryArtifact, classpathDirectory, repositoryLayout);
         if (this.getAppConfiguration().isIncludeDependencies()) {
             for (Artifact artifact : project.getArtifacts()) {
@@ -116,6 +110,18 @@ public class AppGenerator {
         } else {
             this.getLog().debug("Inclusion of dependencies has been disbaled");
         }
+    }
+
+    private Artifact resolvePrimaryArtifact(MavenProject project) {
+        String classifier = this.getAppConfiguration().getPrimaryArtifactClassifier();
+    	if (StringUtils.isNotEmpty(classifier)) {
+            for (Artifact attachedArtifact : project.getAttachedArtifacts()) {
+                if (classifier.equalsIgnoreCase(attachedArtifact.getClassifier())) {
+                    return attachedArtifact;
+                }
+            }
+        }
+        return project.getArtifact();
     }
 
     private void copyClasspathApplicationDependencyArtifact(Artifact artifact, File targetDirectory, ArtifactRepositoryLayout repositoryLayout) throws IOException {
@@ -127,14 +133,8 @@ public class AppGenerator {
     }
 
     private void copyModulesApplicationClasses(MavenProject project, File modulesDirectory) throws IOException {
-        String classifier = this.getAppConfiguration().getPrimaryArtifactClassifier();
-    	Artifact primaryArtifact = null;
-    	if (classifier != null && !classifier.isEmpty())  for (Artifact attachedArtifact : project.getAttachedArtifacts()) {
-            if (classifier.equals(attachedArtifact.getClassifier())) primaryArtifact = attachedArtifact;
-        }
-    	if (primaryArtifact == null) primaryArtifact = project.getArtifact();
+        Artifact primaryArtifact = this.resolvePrimaryArtifact(project);
     	this.copyModulesApplicationClassesArtifact(primaryArtifact, modulesDirectory);
-    	
         if (this.getAppConfiguration().isIncludeDependencies()) {
             for (Artifact artifact : project.getArtifacts()) {
                 this.copyModulesApplicationClassesArtifact(artifact, modulesDirectory);
