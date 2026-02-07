@@ -101,7 +101,14 @@ public class AppGenerator {
 
     private void copyClasspathApplicationClasses(MavenProject project, File classpathDirectory) throws IOException {
         ArtifactRepositoryLayout repositoryLayout = new DefaultRepositoryLayout();
-        this.copyClasspathApplicationDependencyArtifact(project.getArtifact(), classpathDirectory, repositoryLayout);
+        String classifier = this.getAppConfiguration().getPrimaryArtifactClassifier();
+    	Artifact primaryArtifact = null;
+    	if (classifier != null && !classifier.isEmpty())  for (Artifact attachedArtifact : project.getAttachedArtifacts()) {
+            if (classifier.equals(attachedArtifact.getClassifier())) primaryArtifact = attachedArtifact;
+        }
+    	if (primaryArtifact == null) primaryArtifact = project.getArtifact();
+        
+        this.copyClasspathApplicationDependencyArtifact(primaryArtifact, classpathDirectory, repositoryLayout);
         if (this.getAppConfiguration().isIncludeDependencies()) {
             for (Artifact artifact : project.getArtifacts()) {
                 this.copyClasspathApplicationDependencyArtifact(artifact, classpathDirectory, repositoryLayout);
@@ -120,7 +127,14 @@ public class AppGenerator {
     }
 
     private void copyModulesApplicationClasses(MavenProject project, File modulesDirectory) throws IOException {
-        this.copyModulesApplicationClassesArtifact(project.getArtifact(), modulesDirectory);
+        String classifier = this.getAppConfiguration().getPrimaryArtifactClassifier();
+    	Artifact primaryArtifact = null;
+    	if (classifier != null && !classifier.isEmpty())  for (Artifact attachedArtifact : project.getAttachedArtifacts()) {
+            if (classifier.equals(attachedArtifact.getClassifier())) primaryArtifact = attachedArtifact;
+        }
+    	if (primaryArtifact == null) primaryArtifact = project.getArtifact();
+    	this.copyModulesApplicationClassesArtifact(primaryArtifact, modulesDirectory);
+    	
         if (this.getAppConfiguration().isIncludeDependencies()) {
             for (Artifact artifact : project.getArtifacts()) {
                 this.copyModulesApplicationClassesArtifact(artifact, modulesDirectory);
@@ -134,6 +148,8 @@ public class AppGenerator {
         StringBuilder targetFileName = new StringBuilder();
         targetFileName.append(artifact.getArtifactId());
         targetFileName.append("-").append(artifact.getVersion());
+        String classifier = artifact.getClassifier();
+        if (classifier != null && !classifier.isEmpty()) targetFileName.append("-").append(classifier);
         targetFileName.append(".").append(FilenameUtils.getExtension(artifact.getFile().getName()));
         File targetFile = new File(modulesDirectory, targetFileName.toString());
         if (!targetFile.getParentFile().exists()) {

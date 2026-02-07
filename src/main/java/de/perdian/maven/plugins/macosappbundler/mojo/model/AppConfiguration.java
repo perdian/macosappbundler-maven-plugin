@@ -28,6 +28,9 @@ public class AppConfiguration {
 
     @Parameter
     public boolean includeDependencies = true;
+    
+    @Parameter
+    public String primaryArtifactClassifier;
 
     public boolean isIncludeDependencies() {
         return this.includeDependencies;
@@ -35,6 +38,12 @@ public class AppConfiguration {
     public void setIncludeDependencies(boolean includeDependencies) {
         this.includeDependencies = includeDependencies;
     }
-
+    
+    public String getPrimaryArtifactClassifier() {
+		return this.primaryArtifactClassifier;
+	}
+	public void setPrimaryArtifactClassifier(String primaryArtifactClassifier) {
+		this.primaryArtifactClassifier = primaryArtifactClassifier;
+	}
 
 }
