@@ -270,6 +270,8 @@ The following other properties can be added to the `codesign` element configurin
 | `enable` | Boolean | No | `true` | Whether or not to sign the created application bundle. |
 | `identity` | String | Yes | | The identity of the signer. Required if the `codesign` element is present. |
 | `preserveMetadata` | List&lt;String&gt; | No | `entitlements` | |
+| `hardened` | Boolean | No |  | Whether or not to set `options=runtime`. |
+| `entitlementsFilePath` | String | No |  | File path to the entitlements file. |
 
 To sign the application using a local dummy identity (which will only work on the machine where the signing was performed) you can use:
 

@@ -16,14 +16,13 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.impl;
 
-import java.io.File;
-
+import de.perdian.maven.plugins.macosappbundler.mojo.model.CodesignConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.utils.cli.Commandline;
 
-import de.perdian.maven.plugins.macosappbundler.mojo.model.CodesignConfiguration;
+import java.io.File;
 
 public class SignatureGenerator {
 
@@ -39,17 +38,28 @@ public class SignatureGenerator {
 
         this.getLog().info("Signing application '" + appDirectory.getName() + "' using identity: '" + this.getConfiguration().identity + "'");
 
-        String preserveMetadataValue = StringUtils.join(this.getConfiguration().preserveMetadata, ",");
-
         Commandline codesignCommandLine = new Commandline();
         codesignCommandLine.setExecutable("codesign");
         codesignCommandLine.createArg().setValue("--force");
         codesignCommandLine.createArg().setValue("--timestamp");
+
         codesignCommandLine.createArg().setValue("--sign");
         codesignCommandLine.createArg().setValue(this.getConfiguration().identity);
+
+        if (StringUtils.isNotEmpty(this.getConfiguration().entitlementsFile)) {
+            codesignCommandLine.createArg().setValue("--entitlements");
+            codesignCommandLine.createArg().setValue(this.getConfiguration().entitlementsFile);
+        }
+
+        String preserveMetadataValue = StringUtils.join(this.getConfiguration().preserveMetadata, ",");
         if (StringUtils.isNotEmpty(preserveMetadataValue)) {
             codesignCommandLine.createArg().setValue("--preserve-metadata=" + preserveMetadataValue);
         }
+
+        if (this.getConfiguration().hardened) {
+            codesignCommandLine.createArg().setValue("--options=runtime");
+        }
+
         codesignCommandLine.createArg().setFile(appDirectory);
 
         try {

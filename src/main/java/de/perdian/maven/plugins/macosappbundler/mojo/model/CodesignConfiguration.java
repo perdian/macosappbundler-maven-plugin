@@ -16,11 +16,11 @@
  */
 package de.perdian.maven.plugins.macosappbundler.mojo.model;
 
+import org.apache.maven.plugins.annotations.Parameter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.maven.plugins.annotations.Parameter;
 
 public class CodesignConfiguration {
 
@@ -34,5 +34,11 @@ public class CodesignConfiguration {
 
     @Parameter
     public List<String> preserveMetadata = new ArrayList<>(Arrays.asList("entitlements"));
+
+    @Parameter
+    public boolean hardened = false;
+
+    @Parameter
+    public String entitlementsFile = null;
 
 }
